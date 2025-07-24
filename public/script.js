@@ -1,5 +1,5 @@
 // API Configuration
-const API_BASE = 'https://cheer-network.onrender.com';
+const API_BASE = 'https://cheer-network.onrender/api.com';
 
 // Auth state management
 let currentUser = null;
