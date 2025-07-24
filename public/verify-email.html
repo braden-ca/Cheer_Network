@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Verification - The Cheer Network</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .verification-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #4169E1 0%, #5B9BD5 100%);
+        }
+        .verification-card {
+            background: white;
+            padding: 3rem;
+            border-radius: 20px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            text-align: center;
+            max-width: 500px;
+            width: 90%;
+        }
+        .verification-icon {
+            font-size: 4rem;
+            margin-bottom: 1.5rem;
+        }
+        .verification-title {
+            font-size: 2rem;
+            font-weight: 600;
+            color: #2D3748;
+            margin-bottom: 1rem;
+        }
+        .verification-message {
+            color: #4A5568;
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 2rem;
+        }
+        .loading-spinner {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #4169E1;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 1rem 0;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .btn-redirect {
+            background: #4169E1;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .btn-redirect:hover {
+            background: #0F4C95;
+            transform: translateY(-2px);
+        }
+        .error-state {
+            color: #e53e3e;
+        }
+        .success-state {
+            color: #38a169;
+        }
+    </style>
+</head>
+<body>
+    <div class="verification-container">
+        <div class="verification-card">
+            <div id="verification-content">
+                <div class="verification-icon">📧</div>
+                <h1 class="verification-title">Verifying Your Email</h1>
+                <p class="verification-message">
+                    Please wait while we verify your email address...
+                </p>
+                <div class="loading-spinner"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Prevent multiple verification attempts
+        let verificationAttempted = false;
+        
+        // Get token from URL parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const token = urlParams.get('token');
+        const type = urlParams.get('type') || 'signup';
+
+        console.log('Verification page loaded with token:', token ? 'Present' : 'Missing');
+
+        // Update content based on verification status
+        function updateVerificationStatus(status, message, redirectUrl = null) {
+            const content = document.getElementById('verification-content');
+            
+            if (status === 'success') {
+                content.innerHTML = `
+                    <div class="verification-icon success-state">✅</div>
+                    <h1 class="verification-title success-state">Email Verified!</h1>
+                    <p class="verification-message">
+                        ${message}
+                    </p>
+                    <p class="verification-message">
+                        You will be redirected to the login page in <span id="countdown">3</span> seconds.
+                    </p>
+                    <a href="/" class="btn-redirect">Go to Login Now</a>
+                `;
+                
+                // Countdown and redirect
+                let seconds = 3;
+                const countdownEl = document.getElementById('countdown');
+                const countdown = setInterval(() => {
+                    seconds--;
+                    if (countdownEl) countdownEl.textContent = seconds;
+                    
+                    if (seconds <= 0) {
+                        clearInterval(countdown);
+                        console.log('Redirecting to login page...');
+                        window.location.href = '/';
+                    }
+                }, 1000);
+                
+            } else if (status === 'error') {
+                content.innerHTML = `
+                    <div class="verification-icon error-state">❌</div>
+                    <h1 class="verification-title error-state">Verification Failed</h1>
+                    <p class="verification-message error-state">
+                        ${message}
+                    </p>
+                    <a href="/" class="btn-redirect">Return to Home</a>
+                `;
+            }
+        }
+
+        // Verify email token
+        async function verifyEmail() {
+            // Prevent multiple verification attempts
+            if (verificationAttempted) {
+                console.log('Verification already attempted, skipping...');
+                return;
+            }
+            
+            verificationAttempted = true;
+            console.log('Starting email verification...');
+            
+            if (!token) {
+                console.error('No token provided in URL');
+                updateVerificationStatus('error', 'No verification token provided. Please check your email and click the verification link again.');
+                return;
+            }
+
+            try {
+                console.log('Sending verification request to server...');
+                const response = await fetch('/api/auth/verify-email', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        token: token,
+                        type: type
+                    })
+                });
+
+                const data = await response.json();
+                console.log('Server response:', data);
+
+                if (response.ok) {
+                    console.log('Verification successful');
+                    updateVerificationStatus('success', 'Your email has been successfully verified! You can now log in to your account.');
+                } else {
+                    console.error('Verification failed:', data.error);
+                    updateVerificationStatus('error', data.error || 'Email verification failed. The link may have expired or is invalid.');
+                }
+            } catch (error) {
+                console.error('Verification error:', error);
+                updateVerificationStatus('error', 'Connection error. Please check your internet connection and try again.');
+            }
+        }
+
+        // Start verification when page loads - but only once
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', verifyEmail);
+        } else {
+            // DOM is already ready
+            verifyEmail();
+        }
+    </script>
+</body>
+</html> 

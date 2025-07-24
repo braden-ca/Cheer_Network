@@ -1,0 +1,3339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Athlete Dashboard - The Cheer Network</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://js.stripe.com/v3/"></script>
+    <style>
+        :root {
+            /* Royal Blue Light Color Palette */
+            --primary-base: #F5F5F5;
+            --secondary-base: #FAF0E6;
+            --tertiary-base: #F0FFFF;
+            --quaternary-base: #E2E8F0;
+            --primary-accent: #4169E1;
+            --secondary-accent: #5B9BD5;
+            --light-accent: #87CEEB;
+            --dark-accent: #0F4C95;
+            --text-primary: #2D3748;
+            --text-secondary: #4A5568;
+            --text-light: #718096;
+            --white: #FFFFFF;
+            --off-white: #FAFAFA;
+            --gray-100: #F7FAFC;
+            --gray-200: #EDF2F7;
+            --gray-300: #E2E8F0;
+            --gray-400: #CBD5E0;
+            --gray-500: #A0AEC0;
+            --gray-600: #718096;
+            --gray-700: #4A5568;
+            --gray-800: #2D3748;
+            --gray-900: #1A202C;
+            
+            /* Enhanced Typography */
+            --font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            --font-weight-light: 300;
+            --font-weight-normal: 400;
+            --font-weight-medium: 500;
+            --font-weight-semibold: 600;
+            --font-weight-bold: 700;
+            
+            /* Consistent Spacing */
+            --spacing-xs: 0.5rem;
+            --spacing-sm: 1rem;
+            --spacing-md: 1.5rem;
+            --spacing-lg: 2rem;
+            --spacing-xl: 3rem;
+            --spacing-2xl: 4rem;
+            --spacing-3xl: 5rem;
+            
+            /* Unified Border Radius */
+            --radius-sm: 0.375rem;
+            --radius-md: 0.5rem;
+            --radius-lg: 0.75rem;
+            --radius-xl: 1rem;
+            --radius-2xl: 1.25rem;
+            
+            /* Enhanced Shadows */
+            --shadow-sm: 0 1px 2px 0 rgba(65, 105, 225, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(65, 105, 225, 0.1), 0 2px 4px -1px rgba(65, 105, 225, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(65, 105, 225, 0.1), 0 4px 6px -2px rgba(65, 105, 225, 0.05);
+            --shadow-xl: 0 20px 25px -5px rgba(65, 105, 225, 0.1), 0 10px 10px -5px rgba(65, 105, 225, 0.04);
+            --shadow-accent: 0 10px 20px rgba(65, 105, 225, 0.15);
+            --shadow-dark: 0 10px 20px rgba(15, 76, 149, 0.2);
+        }
+
+        .dashboard-container {
+            min-height: 100vh;
+            background: linear-gradient(135deg, var(--primary-base) 0%, var(--secondary-base) 100%);
+        }
+        
+        .navbar {
+            background: linear-gradient(135deg, 
+                rgba(245, 245, 245, 0.95) 0%, 
+                rgba(250, 240, 230, 0.95) 50%, 
+                rgba(74, 144, 226, 0.1) 100%);
+            border-bottom: 2px solid var(--primary-accent);
+            color: var(--text-primary);
+            padding: 0;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 85px;
+            backdrop-filter: blur(15px);
+            box-shadow: 0 10px 20px rgba(46, 134, 171, 0.3);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+        }
+        
+        .navbar-brand {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-md);
+            padding: 0 var(--spacing-lg);
+            border-right: 1px solid rgba(65, 105, 225, 0.2);
+            margin-right: var(--spacing-lg);
+            transition: transform 0.3s ease;
+        }
+
+        .navbar-brand:hover {
+            transform: translateY(-2px);
+        }
+        
+        .navbar-brand img {
+            width: 55px;
+            height: 55px;
+            border-radius: var(--radius-md);
+            filter: drop-shadow(0 4px 8px rgba(65, 105, 225, 0.3));
+            transition: filter 0.3s ease;
+        }
+
+        .navbar-brand:hover img {
+            filter: drop-shadow(0 6px 12px rgba(65, 105, 225, 0.5));
+        }
+        
+        .navbar-brand h2 {
+            color: var(--text-primary);
+            font-size: 1.6rem;
+            margin: 0;
+            font-weight: var(--font-weight-bold);
+        }
+        
+        .user-info {
+            margin-left: auto;
+            padding: 0 var(--spacing-lg);
+            text-align: right;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+        }
+        
+        .user-info h3 {
+            margin: 0;
+            font-size: 1.1rem;
+            color: var(--primary-accent);
+            font-weight: var(--font-weight-semibold);
+        }
+        
+        .user-role {
+            font-size: 0.9rem;
+            color: var(--primary-gold);
+            font-weight: var(--font-weight-medium);
+            margin-top: 2px;
+        }
+        
+        .nav-menu {
+            display: flex;
+            flex: 1;
+            gap: var(--spacing-xs);
+            align-items: center;
+        }
+        
+        .nav-item {
+            padding: 0 var(--spacing-lg);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: var(--font-weight-medium);
+            font-size: 1.05rem;
+            border-bottom: 3px solid transparent;
+            color: var(--text-primary);
+            height: 85px;
+            min-width: 140px;
+            text-decoration: none;
+            position: relative;
+            border-radius: var(--radius-md);
+        }
+
+        .nav-item:hover {
+            background: rgba(65, 105, 225, 0.08);
+            color: var(--primary-accent);
+        }
+        
+        .nav-item::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 8px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, var(--primary-accent), var(--secondary-accent));
+            transition: width 0.3s ease;
+            border-radius: 1px;
+        }
+        
+        .nav-item.active {
+            background: linear-gradient(135deg, var(--dark-accent), var(--primary-accent));
+            font-weight: var(--font-weight-semibold);
+            color: var(--white);
+            box-shadow: inset 0 -3px 0 var(--primary-gold);
+        }
+
+        .nav-item.active::after {
+            width: 80%;
+        }
+        
+        .nav-item span {
+            white-space: nowrap;
+        }
+        
+        .main-content {
+            margin-top: 85px;
+            padding: var(--spacing-xl);
+            overflow-y: auto;
+            max-width: 1400px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--spacing-xl);
+            padding-bottom: var(--spacing-lg);
+            border-bottom: 2px solid rgba(65, 105, 225, 0.2);
+        }
+        
+        .dashboard-title {
+            font-size: 2.5rem;
+            font-weight: var(--font-weight-bold);
+            color: var(--text-primary);
+        }
+        
+        .section-content {
+            background: white;
+            border: 1px solid #E2E8F0;
+            border-radius: var(--radius-2xl);
+            padding: var(--spacing-xl);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            min-height: 600px;
+            color: var(--text-primary);
+            position: relative;
+        }
+
+        .section-content::before {
+            display: none;
+        }
+        
+        .section-title {
+            font-size: 2rem;
+            font-weight: var(--font-weight-bold);
+            margin-bottom: var(--spacing-xl);
+            color: var(--text-primary);
+            padding-bottom: var(--spacing-sm);
+            border-bottom: 2px solid var(--primary-accent);
+            display: inline-block;
+        }
+        
+        .coaches-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+            gap: var(--spacing-xl);
+            margin-top: var(--spacing-xl);
+        }
+        
+        .coach-card {
+            background: white;
+            border: 2px solid var(--primary-accent);
+            border-radius: var(--radius-xl);
+            padding: var(--spacing-xl);
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            color: var(--text-primary);
+            box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+        }
+
+        .coach-card::before {
+            display: none;
+        }
+        
+        .coach-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--primary-accent);
+            box-shadow: 0 8px 25px rgba(65,105,225,0.15);
+        }
+
+
+        
+        .coach-header {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-lg);
+            margin-bottom: var(--spacing-lg);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .coach-avatar {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-accent), var(--secondary-accent));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: var(--font-weight-bold);
+            font-size: 1.8rem;
+            flex-shrink: 0;
+            box-shadow: 0 4px 12px rgba(65, 105, 225, 0.3);
+            border: 3px solid var(--primary-accent);
+            transition: all 0.3s ease;
+        }
+
+        .coach-card:hover .coach-avatar {
+            transform: scale(1.05);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+        }
+        
+        .coach-info h3 {
+            margin: 0 0 var(--spacing-xs) 0;
+            font-size: 1.4rem;
+            color: var(--text-primary);
+            font-weight: var(--font-weight-bold);
+        }
+        
+        .coach-school,
+        .coach-location,
+        .coach-experience {
+            color: var(--text-secondary);
+        }
+        
+        .coach-specialty {
+            background: #f0f9ff;
+            color: #4169E1;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            margin-right: 0.5rem;
+            margin-bottom: 0.5rem;
+            display: inline-block;
+        }
+        
+        .coach-experience {
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+        
+        .coach-actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--spacing-md);
+            margin-top: 1rem;
+        }
+
+        .coach-actions .btn-view-events {
+            grid-column: 1 / -1;
+            justify-self: center;
+            max-width: 150px;
+        }
+        
+        .btn-connect {
+            background: white;
+            color: var(--primary-accent);
+            padding: var(--spacing-sm) var(--spacing-md);
+            border: 2px solid var(--primary-accent);
+            border-radius: var(--radius-lg);
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: var(--font-weight-semibold);
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+            position: relative;
+            overflow: hidden;
+            text-align: center;
+            white-space: nowrap;
+        }
+
+        .btn-connect:hover {
+            background: var(--primary-accent);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(65,105,225,0.2);
+        }
+
+        .btn-connect::before { display: none; }
+        
+        .btn-pending {
+            background: #f59e0b;
+            cursor: not-allowed;
+        }
+        
+        .btn-pending:hover {
+            background: #f59e0b;
+            transform: none;
+        }
+        
+        .btn-connected {
+            background: linear-gradient(135deg, var(--primary-gold), var(--secondary-gold));
+            color: var(--primary-black);
+            padding: var(--spacing-sm) var(--spacing-md);
+            border: none;
+            border-radius: var(--radius-lg);
+            cursor: default;
+            font-size: 0.9rem;
+            font-weight: var(--font-weight-semibold);
+            box-shadow: var(--shadow-gold);
+            text-align: center;
+            white-space: nowrap;
+        }
+        
+        .btn-connected:hover {
+            background: linear-gradient(135deg, var(--secondary-gold), var(--light-gold));
+        }
+        
+        .btn-registered {
+            background: linear-gradient(135deg, var(--primary-gold), var(--secondary-gold));
+            color: var(--primary-black);
+            padding: var(--spacing-sm) var(--spacing-md);
+            border: none;
+            border-radius: var(--radius-lg);
+            cursor: not-allowed;
+            font-size: 0.9rem;
+            font-weight: var(--font-weight-semibold);
+            box-shadow: var(--shadow-gold);
+            text-align: center;
+            white-space: nowrap;
+        }
+        
+        .btn-full {
+            background: linear-gradient(135deg, #ef4444, #f87171);
+            color: var(--white);
+            padding: var(--spacing-sm) var(--spacing-md);
+            border: none;
+            border-radius: var(--radius-lg);
+            cursor: not-allowed;
+            font-size: 0.9rem;
+            font-weight: var(--font-weight-semibold);
+            box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3);
+            text-align: center;
+            white-space: nowrap;
+        }
+        
+        .event-meta {
+            color: var(--primary-black);
+            font-size: 1rem;
+            line-height: 1.8;
+            margin-bottom: var(--spacing-lg);
+            position: relative;
+            z-index: 1;
+        }
+
+        .event-description {
+            color: var(--primary-black);
+            font-size: 1rem;
+            line-height: 1.6;
+            margin-bottom: var(--spacing-lg);
+            position: relative;
+            z-index: 1;
+        }
+
+        .event-requirements {
+            margin-top: var(--spacing-lg);
+            padding: var(--spacing-lg);
+            background: linear-gradient(135deg, 
+                rgba(0, 0, 0, 0.1) 0%, 
+                rgba(0, 0, 0, 0.05) 100%);
+            border-radius: var(--radius-md);
+            border-left: 4px solid var(--primary-black);
+            font-size: 0.95rem;
+            color: var(--primary-black);
+            position: relative;
+            z-index: 1;
+        }
+
+        .event-requirements strong {
+            color: var(--primary-black);
+            font-weight: var(--font-weight-bold);
+        }
+        
+        .connections-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+        
+        .connection-card {
+            background: white;
+            border: 2px solid var(--primary-accent);
+            border-radius: var(--radius-xl);
+            padding: var(--spacing-xl);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            color: var(--text-primary);
+            box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+        }
+        
+        .connection-card:hover {
+            box-shadow: 0 8px 20px rgba(65,105,225,0.15);
+            transform: translateY(-6px);
+            border-color: var(--primary-accent);
+        }
+        
+        .clinics-list {
+            margin-top: 1.5rem;
+        }
+        
+        .clinic-item {
+            background: white;
+            border: 2px solid var(--primary-accent);
+            border-radius: var(--radius-xl);
+            padding: var(--spacing-xl);
+            margin-bottom: var(--spacing-lg);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            color: var(--text-primary);
+            box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+        }
+
+        .clinic-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, 
+                rgba(255, 255, 255, 0.1) 0%, 
+                transparent 50%, 
+                rgba(255, 255, 255, 0.1) 100%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+        }
+        
+        .clinic-item:hover {
+            transform: translateY(-6px);
+            border-color: var(--primary-accent);
+            box-shadow: 0 8px 20px rgba(65,105,225,0.15);
+        }
+
+        .clinic-item:hover::before {
+            opacity: 1;
+        }
+        
+        .messages-container {
+            display: flex;
+            height: 700px;
+            border: 2px solid var(--primary-accent);
+            border-radius: var(--radius-xl);
+            overflow: hidden;
+            margin-top: var(--spacing-xl);
+            background: white;
+        }
+        
+        .conversations-list {
+            width: 350px;
+            border-right: 1px solid #E2E8F0;
+            background: #f8fafc;
+        }
+        
+        .conversation-item { background: white; color: var(--text-primary); }
+
+        .conversation-item.active { background: rgba(65,105,225,0.1); color: var(--primary-accent); border-left: 4px solid var(--primary-accent); }
+        
+        .message-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .messages-header {
+            padding: var(--spacing-lg);
+            border-bottom: 1px solid #E2E8F0;
+            background: white;
+            color: var(--text-primary);
+        }
+        
+        .messages-content {
+            flex: 1;
+            padding: var(--spacing-lg);
+            overflow-y: auto;
+            background: white;
+        }
+        
+        .message-input-area {
+            padding: var(--spacing-lg);
+            border-top: 1px solid #E2E8F0;
+            background: white;
+        }
+        
+        .message-input {
+            width: 100%;
+            padding: var(--spacing-lg);
+            border: 1px solid #E2E8F0;
+            border-radius: var(--radius-lg);
+            color: var(--text-primary);
+            background: white;
+            font-size: 1rem;
+            transition: all 0.2s ease;
+        }
+
+        .message-input:focus {
+            outline: none;
+            border-color: var(--primary-accent);
+            box-shadow: 0 0 0 2px rgba(65,105,225,0.25);
+        }
+
+        .message-input::placeholder {
+            color: var(--gray-400);
+        }
+        
+        .unread-count {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #e53e3e;
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        
+        .conversation-item {
+            padding: 1rem;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            color: var(--primary-black);
+        }
+        
+        .conversation-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .conversation-item.active {
+            background: linear-gradient(135deg, var(--dark-gold), var(--primary-gold));
+            color: var(--primary-black);
+            border-left: 4px solid var(--primary-black);
+        }
+        
+                .conversation-item.active .conversation-name {
+            color: var(--primary-black);
+        }
+
+        .conversation-item.active .conversation-last-message {
+            color: var(--primary-black);
+        }
+
+        .conversation-item.active .conversation-time {
+            color: var(--primary-black);
+        }
+        
+        .conversation-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-black), var(--secondary-black));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-gold);
+            font-weight: 600;
+            flex-shrink: 0;
+            border: 2px solid var(--dark-gold);
+        }
+        
+        .conversation-info {
+            flex: 1;
+            min-width: 0;
+        }
+        
+                .conversation-name {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+            color: #000000; /* Black text for conversation names */
+        }
+
+        .conversation-last-message {
+            font-size: 0.9rem;
+            color: #000000; /* Black text for last message */
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .conversation-time {
+            font-size: 0.8rem;
+            color: #000000; /* Black text for time */
+            margin-top: 0.25rem;
+        }
+        
+        /* Message styling - exact match to clinician dashboard */
+        .message {
+            margin-bottom: 1rem;
+            max-width: 70%;
+        }
+        
+        .own-message {
+            margin-left: auto;
+            text-align: right;
+        }
+        
+        .other-message {
+            margin-right: auto;
+        }
+        
+        .message-content {
+            background: #f7fafc;
+            padding: 0.75rem 1rem;
+            border-radius: 12px;
+            margin-bottom: 0.25rem;
+            color: #000000; /* Black text */
+        }
+        
+        .own-message .message-content {
+            background: #4169E1;
+            color: #000000; /* Black text on gold background for readability */
+        }
+        
+        .message-time {
+            font-size: 0.75rem;
+            color: var(--white); /* White text for timestamps */
+        }
+
+        /* Chat Modal Styles */
+        .chat-modal {
+            max-width: 600px;
+            max-height: 90vh;
+            width: 95%;
+        }
+
+        .chat-container {
+            display: flex;
+            flex-direction: column;
+            height: 70vh;
+            max-height: 600px;
+        }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            background: white;
+            max-height: 300px;
+        }
+
+        .chat-message {
+            margin-bottom: 1rem;
+            max-width: 80%;
+        }
+
+        .chat-message.sent {
+            margin-left: auto;
+            text-align: right;
+        }
+
+        .chat-message.received {
+            margin-right: auto;
+        }
+
+        .chat-message-content {
+            background: #f1f5f9;
+            padding: 0.75rem 1rem;
+            border-radius: 12px;
+            margin-bottom: 0.25rem;
+            word-wrap: break-word;
+        }
+
+        .chat-message.sent .chat-message-content {
+            background: #4169E1;
+            color: #000000;
+        }
+
+        .chat-message-time {
+            font-size: 0.75rem;
+            color: var(--white);
+            margin-top: 0.25rem;
+        }
+
+        .example-messages {
+            margin-bottom: 1rem;
+            padding: 1rem;
+            background: #f8fafc;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .example-messages h4 {
+            margin: 0 0 0.75rem 0;
+            color: #1e293b;
+            font-size: 0.9rem;
+        }
+
+        .example-message-buttons {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 0.5rem;
+        }
+
+        .example-btn {
+            background: white;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            padding: 0.5rem 0.75rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: left;
+            font-size: 0.85rem;
+            line-height: 1.4;
+        }
+
+        .example-btn:hover {
+            background: #f3f4f6;
+            border-color: #4169E1;
+            transform: translateY(-1px);
+        }
+
+        .example-btn:active {
+            transform: translateY(0);
+        }
+
+        .chat-input-area {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .chat-input-area textarea {
+            resize: vertical;
+            min-height: 80px;
+            padding: 0.75rem;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-family: inherit;
+            font-size: 0.9rem;
+            color: #000000;
+            background: white;
+        }
+
+        .chat-input-area textarea:focus {
+            outline: none;
+            border-color: #4169E1;
+            box-shadow: 0 0 0 1px #4169E1;
+        }
+
+        .chat-input-area button {
+            align-self: flex-end;
+            min-width: 120px;
+        }
+
+        @media (max-width: 768px) {
+            .chat-modal {
+                width: 98%;
+                max-height: 95vh;
+            }
+            
+            .chat-container {
+                height: 60vh;
+            }
+            
+            .example-message-buttons {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        /* Ensure all inputs and textareas have dark text */
+        input, textarea {
+            color: #000000 !important;
+            background: white !important;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideOut {
+            from {
+                transform: translateX(0);
+                opacity: 1;
+            }
+            to {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+        }
+
+        .event-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--spacing-lg);
+            position: relative;
+            z-index: 1;
+        }
+
+        .event-title {
+            color: var(--primary-black);
+            margin: 0;
+            font-size: 1.5rem;
+            font-weight: var(--font-weight-bold);
+        }
+
+        .event-price {
+            color: var(--primary-black);
+            font-weight: var(--font-weight-bold);
+            font-size: 1.3rem;
+            text-shadow: none;
+        }
+        
+        .logout-btn {
+            background: linear-gradient(135deg, 
+                rgba(239, 68, 68, 0.8) 0%, 
+                rgba(248, 113, 113, 0.8) 100%);
+            color: var(--white);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            padding: var(--spacing-sm) var(--spacing-lg);
+            margin-left: var(--spacing-lg);
+            border-radius: var(--radius-lg);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: var(--font-weight-semibold);
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            white-space: nowrap;
+            box-shadow: 0 4px 15px rgba(239, 68, 68, 0.2);
+        }
+        
+        .logout-btn:hover {
+            background: linear-gradient(135deg, 
+                rgba(239, 68, 68, 1) 0%, 
+                rgba(248, 113, 113, 1) 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(239, 68, 68, 0.4);
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 2rem;
+            color: #4a5568;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: #4a5568;
+        }
+        
+        .empty-state h3 {
+            margin: 0 0 0.5rem 0;
+            color: #1a202c;
+        }
+        
+        /* Modal styles */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+        }
+        
+        .modal-content {
+            position: relative;
+            background: white;
+            border-radius: 12px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .modal-header h2 {
+            margin: 0;
+            color: #1a202c;
+            font-size: 1.5rem;
+        }
+        
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #4a5568;
+            padding: 0.5rem;
+            line-height: 1;
+            position: relative;
+            z-index: 1000;
+            min-width: 40px;
+            min-height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+        }
+        
+        .modal-close:hover {
+            color: #1a202c;
+            background-color: rgba(0, 0, 0, 0.1);
+            transform: scale(1.1);
+        }
+        
+        .modal-body {
+            padding: 1.5rem;
+        }
+        
+        .coach-profile-header {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .coach-profile-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #4169E1, #5B9BD5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 2rem;
+            flex-shrink: 0;
+        }
+        
+        .coach-profile-info h3 {
+            margin: 0 0 0.5rem 0;
+            font-size: 1.5rem;
+            color: #1a202c;
+        }
+        
+        .coach-profile-bio {
+            color: #4a5568;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+        
+        .coach-profile-details {
+            display: grid;
+            gap: 1.5rem;
+        }
+        
+        .detail-section {
+            background: #f8fafc;
+            padding: 1.5rem;
+            border-radius: 8px;
+            border-left: 4px solid #4169E1;
+        }
+        
+        .detail-section h4 {
+            margin: 0 0 1rem 0;
+            color: #1a202c;
+            font-size: 1.1rem;
+        }
+        
+        .detail-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+        
+        .detail-item {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+        
+        .detail-label {
+            font-weight: 600;
+            color: #1a202c;
+            font-size: 0.9rem;
+        }
+        
+        .detail-value {
+            color: #4a5568;
+        }
+        
+        .profile-specialties {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+        
+        .profile-specialty-tag {
+            background: #dbeafe;
+            color: #4169E1;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+        
+        .coach-actions {
+            gap: 1rem;
+        }
+        
+        @media (max-width: 768px) {
+            .navbar {
+                height: auto;
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .navbar-brand {
+                border-right: none;
+                border-bottom: 1px solid rgba(255,255,255,0.1);
+                margin: 0;
+                padding: 1rem 1.5rem;
+            }
+            
+            .nav-menu {
+                flex-direction: column;
+                width: 100%;
+            }
+            
+            .nav-item {
+                height: 50px;
+                min-width: auto;
+                justify-content: flex-start;
+                border-bottom: none;
+                border-left: 3px solid transparent;
+            }
+            
+            .nav-item:hover {
+                border-left-color: rgba(65, 105, 225, 0.5);
+                border-bottom-color: transparent;
+            }
+            
+            .nav-item.active {
+                border-left-color: #4169E1;
+                border-bottom-color: transparent;
+            }
+            
+            .user-info {
+                margin: 0;
+                padding: 1rem 1.5rem;
+                text-align: left;
+                border-top: 1px solid rgba(255,255,255,0.1);
+            }
+            
+            .logout-btn {
+                margin: 1rem 1.5rem;
+                justify-content: flex-start;
+            }
+            
+            .main-content {
+                margin-top: 0;
+            }
+            
+            .coaches-grid, .connections-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .messages-container {
+                flex-direction: column;
+                height: auto;
+            }
+            
+                    .conversations-list {
+            width: 100%;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+    }
+
+    /* Payment Modal Styles */
+    .payment-modal {
+        max-width: 600px;
+        max-height: 90vh;
+        overflow-y: auto;
+    }
+
+    .payment-container {
+        display: flex;
+        flex-direction: column;
+        gap: var(--spacing-lg);
+    }
+
+    .payment-details {
+        background: var(--white);
+        padding: var(--spacing-lg);
+        border-radius: var(--radius-lg);
+        color: var(--primary-black);
+        border: 1px solid var(--gray-200);
+    }
+
+    .payment-details h3 {
+        margin: 0 0 var(--spacing-sm) 0;
+        font-weight: var(--font-weight-bold);
+    }
+
+    .event-details {
+        display: grid;
+        gap: var(--spacing-xs);
+    }
+
+    .detail-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: var(--spacing-xs) 0;
+        border-bottom: 1px solid rgba(10, 10, 10, 0.1);
+    }
+
+    .detail-row:last-child {
+        border-bottom: none;
+        font-weight: var(--font-weight-bold);
+        font-size: 1.1rem;
+        margin-top: var(--spacing-sm);
+        padding-top: var(--spacing-sm);
+        border-top: 2px solid var(--gray-300);
+    }
+
+    .payment-form {
+        background: var(--white);
+        padding: var(--spacing-lg);
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--gray-200);
+    }
+
+    .payment-form h4 {
+        margin: 0 0 var(--spacing-md) 0;
+        color: var(--primary-black);
+        font-weight: var(--font-weight-semibold);
+    }
+
+    #payment-element {
+        margin-bottom: var(--spacing-md);
+        padding: var(--spacing-md);
+        border: 1px solid var(--gray-300);
+        border-radius: var(--radius-md);
+        background: var(--white);
+    }
+
+    .payment-message {
+        margin: var(--spacing-sm) 0;
+        padding: var(--spacing-sm);
+        border-radius: var(--radius-sm);
+        font-size: 0.9rem;
+    }
+
+    .payment-message.error {
+        background: #fee2e2;
+        color: #dc2626;
+        border: 1px solid #fecaca;
+    }
+
+    .payment-message.success {
+        background: #f0f9ff;
+        color: #0369a1;
+        border: 1px solid #bae6fd;
+    }
+
+    .payment-actions {
+        display: flex;
+        gap: var(--spacing-md);
+        margin-top: var(--spacing-lg);
+    }
+
+    .payment-actions button {
+        flex: 1;
+        min-height: 48px;
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .spinner {
+        animation: spin 1s linear infinite;
+        margin-left: var(--spacing-xs);
+    }
+
+    .spinner.hidden {
+        display: none;
+    }
+
+    @keyframes spin {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+    }
+
+    #submit-payment:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+
+    .modal-content.chat-modal {
+        background: white !important;
+        color: var(--text-primary);
+    }
+
+    /* ===== Messaging Blue Theme (matching clinician) ===== */
+    .own-message .message-content,
+    .chat-message.sent .chat-message-content {
+        background: linear-gradient(135deg, var(--primary-accent), var(--secondary-accent));
+        color: var(--white);
+    }
+
+    .other-message .message-content,
+    .chat-message.received .chat-message-content {
+        background: #f0f4ff;
+        color: var(--text-primary);
+    }
+
+    .conversation-item.active {
+        background-color: var(--primary-accent);
+        color: var(--white);
+        border-left: none;
+    }
+
+    .conversation-item.active .conversation-name,
+    .conversation-item.active .conversation-last-message,
+    .conversation-item.active .conversation-time {
+        color: var(--white);
+    }
+
+    .conversation-avatar {
+        background: linear-gradient(135deg, var(--primary-accent), var(--secondary-accent));
+        color: var(--white);
+        border: none;
+    }
+
+    /* Account Settings Styles */
+    .account-settings {
+        max-width: 800px;
+        margin: 0 auto;
+    }
+
+    .settings-section {
+        background: var(--white);
+        border: 1px solid var(--gray-200);
+        border-radius: var(--radius-lg);
+        padding: var(--spacing-xl);
+        margin-bottom: var(--spacing-xl);
+        box-shadow: var(--shadow-sm);
+    }
+
+    .settings-subtitle {
+        font-size: 1.5rem;
+        font-weight: var(--font-weight-semibold);
+        color: var(--text-primary);
+        margin-bottom: var(--spacing-lg);
+        padding-bottom: var(--spacing-sm);
+        border-bottom: 2px solid var(--primary-accent);
+        display: inline-block;
+    }
+
+    .settings-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: var(--spacing-lg);
+    }
+
+    .form-group.full-width {
+        grid-column: 1 / -1;
+    }
+
+    .form-group label {
+        display: block;
+        font-weight: var(--font-weight-medium);
+        color: var(--text-primary);
+        margin-bottom: var(--spacing-xs);
+        font-size: 0.95rem;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+        width: 100%;
+        padding: var(--spacing-sm);
+        border: 2px solid var(--gray-200);
+        border-radius: var(--radius-md);
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        background: var(--white);
+        color: var(--text-primary);
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+        outline: none;
+        border-color: var(--primary-accent);
+        box-shadow: 0 0 0 3px rgba(65, 105, 225, 0.1);
+    }
+
+    .form-group input[readonly] {
+        background: var(--gray-100);
+        color: var(--text-secondary);
+        cursor: not-allowed;
+    }
+
+    .form-help {
+        font-size: 0.85rem;
+        color: var(--text-light);
+        margin-top: var(--spacing-xs);
+    }
+
+    .profile-picture-section {
+        display: flex;
+        align-items: center;
+        gap: var(--spacing-xl);
+    }
+
+    .profile-picture-preview {
+        flex-shrink: 0;
+    }
+
+    .profile-avatar-large {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, var(--primary-accent), var(--secondary-accent));
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--white);
+        font-size: 2.5rem;
+        font-weight: var(--font-weight-bold);
+        border: 4px solid var(--white);
+        box-shadow: var(--shadow-md);
+        background-size: cover;
+        background-position: center;
+    }
+
+    .profile-picture-actions {
+        display: flex;
+        flex-direction: column;
+        gap: var(--spacing-sm);
+    }
+
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: var(--spacing-lg);
+    }
+
+    .stat-card {
+        background: linear-gradient(135deg, var(--primary-accent), var(--secondary-accent));
+        color: var(--white);
+        padding: var(--spacing-lg);
+        border-radius: var(--radius-lg);
+        text-align: center;
+        box-shadow: var(--shadow-md);
+    }
+
+    .stat-number {
+        font-size: 2rem;
+        font-weight: var(--font-weight-bold);
+        margin-bottom: var(--spacing-xs);
+    }
+
+    .stat-label {
+        font-size: 0.9rem;
+        opacity: 0.9;
+    }
+
+    .settings-actions {
+        display: flex;
+        gap: var(--spacing-md);
+        justify-content: center;
+        margin-top: var(--spacing-xl);
+        padding-top: var(--spacing-xl);
+        border-top: 1px solid var(--gray-200);
+    }
+
+    @media (max-width: 768px) {
+        .settings-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .profile-picture-section {
+            flex-direction: column;
+            text-align: center;
+        }
+
+        .stats-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .settings-actions {
+            flex-direction: column;
+        }
+    }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Top Navigation -->
+        <nav class="navbar">
+            <div class="navbar-brand">
+                <h2>Cheer Network</h2>
+            </div>
+            
+            <div class="nav-menu">
+                <div class="nav-item active" data-section="coaches">
+                    <span>Dashboard</span>
+                </div>
+                <div class="nav-item" data-section="connections">
+                    <span>My Coaches</span>
+                </div>
+                <div class="nav-item" data-section="clinics">
+                    <span>Training Events</span>
+                </div>
+                <div class="nav-item" data-section="messages">
+                    <span>Messages</span>
+                </div>
+                <div class="nav-item" data-section="account">
+                    <span>Account Settings</span>
+                </div>
+            </div>
+            
+            <div class="user-info">
+                <h3 id="user-name">Loading...</h3>
+                <div class="user-role">Athlete</div>
+            </div>
+            
+            <button class="logout-btn" id="logout-btn">
+                <span>Logout</span>
+            </button>
+        </nav>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="dashboard-header">
+                <h1 class="dashboard-title">Athlete Dashboard</h1>
+            </div>
+
+            <!-- Coaches Section -->
+            <div id="coaches-section" class="dashboard-section">
+                <div class="section-content">
+                    <h2 class="section-title">🏆 Available Coaches</h2>
+                    <div id="coaches-loading" class="loading">Loading coaches...</div>
+                    <div id="coaches-grid" class="coaches-grid hidden"></div>
+                </div>
+            </div>
+
+            <!-- Connections Section -->
+            <div id="connections-section" class="dashboard-section hidden">
+                <div class="section-content">
+                    <h2 class="section-title">🤝 My Connections</h2>
+                    <div id="connections-loading" class="loading">Loading connections...</div>
+                    <div id="connections-grid" class="connections-grid hidden"></div>
+                    <div id="connections-empty" class="empty-state hidden">
+                        <h3>No connections yet</h3>
+                        <p>Connect with coaches to start building your network!</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Clinics Section -->
+            <div id="clinics-section" class="dashboard-section hidden">
+                <div class="section-content">
+                    <h2 class="section-title">📅 Available Clinics</h2>
+                    <div id="clinics-loading" class="loading">Loading clinics...</div>
+                    <div id="clinics-list" class="clinics-list hidden"></div>
+                </div>
+            </div>
+
+            <!-- Messages Section -->
+            <div id="messages-section" class="dashboard-section hidden">
+                <div class="section-content">
+                    <h2 class="section-title">💬 Messages</h2>
+                    <div id="messages-container" class="messages-container">
+                        <div class="conversations-list">
+                            <div id="conversations-loading" class="loading">Loading conversations...</div>
+                            <div id="conversations-list"></div>
+                        </div>
+                        <div class="message-area">
+                            <div class="messages-header">
+                                <h3 id="current-conversation">Select a conversation</h3>
+                            </div>
+                            <div class="messages-content" id="messages-content">
+                                <div class="empty-state">
+                                    <h3>Select a conversation</h3>
+                                    <p>Choose a connection to start messaging</p>
+                                </div>
+                            </div>
+                            <div class="message-input-area hidden" id="message-input-area">
+                                <textarea class="message-input" id="message-input" placeholder="Type your message..." rows="3"></textarea>
+                                <button class="btn-connect" id="send-message-btn">Send Message</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Account Settings Section -->
+            <div id="account-section" class="dashboard-section hidden">
+                <div class="section-content">
+                    <h2 class="section-title">⚙️ Account Settings</h2>
+                    
+                    <div id="account-loading" class="loading">Loading account settings...</div>
+                    <div id="account-content" class="account-settings hidden">
+                        <!-- Profile Information -->
+                        <div class="settings-section">
+                            <h3 class="settings-subtitle">👤 Profile Information</h3>
+                            <div class="settings-grid">
+                                <div class="form-group">
+                                    <label for="first-name">First Name</label>
+                                    <input type="text" id="first-name" placeholder="Enter your first name">
+                                </div>
+                                <div class="form-group">
+                                    <label for="last-name">Last Name</label>
+                                    <input type="text" id="last-name" placeholder="Enter your last name">
+                                </div>
+                                <div class="form-group">
+                                    <label for="email">Email Address</label>
+                                    <input type="email" id="email" placeholder="Enter your email" readonly>
+                                    <small class="form-help">Email cannot be changed</small>
+                                </div>
+                                <div class="form-group">
+                                    <label for="bio">Bio</label>
+                                    <textarea id="bio" rows="3" placeholder="Tell coaches about yourself, your goals, and experience..."></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Athlete Profile -->
+                        <div class="settings-section">
+                            <h3 class="settings-subtitle">🏆 Athlete Profile</h3>
+                            <div class="settings-grid">
+                                <div class="form-group">
+                                    <label for="age">Age</label>
+                                    <input type="number" id="age" min="8" max="25" placeholder="Enter your age">
+                                </div>
+                                <div class="form-group">
+                                    <label for="skill-level">Skill Level</label>
+                                    <select id="skill-level">
+                                        <option value="beginner">Beginner</option>
+                                        <option value="intermediate">Intermediate</option>
+                                        <option value="advanced">Advanced</option>
+                                        <option value="elite">Elite</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="team-affiliation">Team/School</label>
+                                    <input type="text" id="team-affiliation" placeholder="Your team or school name">
+                                </div>
+                                <div class="form-group">
+                                    <label for="location">Location</label>
+                                    <input type="text" id="location" placeholder="City, State">
+                                </div>
+                                <div class="form-group full-width">
+                                    <label for="goals">Goals & Objectives</label>
+                                    <textarea id="goals" rows="4" placeholder="What are your cheerleading goals? What skills do you want to improve?"></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Profile Picture -->
+                        <div class="settings-section">
+                            <h3 class="settings-subtitle">📸 Profile Picture</h3>
+                            <div class="profile-picture-section">
+                                <div class="profile-picture-preview">
+                                    <div id="profile-avatar" class="profile-avatar-large">
+                                        <span id="profile-initials">CN</span>
+                                    </div>
+                                </div>
+                                <div class="profile-picture-actions">
+                                    <input type="file" id="profile-image-input" accept="image/*" style="display: none;">
+                                    <button type="button" class="btn-secondary" onclick="document.getElementById('profile-image-input').click()">
+                                        📁 Choose Photo
+                                    </button>
+                                    <button type="button" class="btn-outline" id="remove-photo-btn" style="display: none;">
+                                        🗑️ Remove Photo
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Account Statistics -->
+                        <div class="settings-section">
+                            <h3 class="settings-subtitle">📊 Account Statistics</h3>
+                            <div class="stats-grid">
+                                <div class="stat-card">
+                                    <div class="stat-number" id="following-count">0</div>
+                                    <div class="stat-label">Coaches Following</div>
+                                </div>
+                                <div class="stat-card">
+                                    <div class="stat-number" id="events-count">0</div>
+                                    <div class="stat-label">Events Attended</div>
+                                </div>
+                                <div class="stat-card">
+                                    <div class="stat-number" id="member-since">-</div>
+                                    <div class="stat-label">Member Since</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Save Changes -->
+                        <div class="settings-actions">
+                            <button type="button" class="btn-primary" id="save-settings-btn">
+                                💾 Save Changes
+                            </button>
+                            <button type="button" class="btn-outline" id="reset-settings-btn">
+                                🔄 Reset to Default
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Coach Profile Modal -->
+    <div id="coachProfileModal" class="modal" style="display: none;">
+        <div class="modal-overlay"></div>
+        <div class="modal-content coach-profile-modal">
+            <div class="modal-header">
+                <h2>Coach Profile</h2>
+                <button class="modal-close" id="coachProfileCloseBtn" title="Close">×</button>
+            </div>
+            <div class="modal-body" id="coachProfileContent">
+                <div class="loading">Loading profile...</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Chat Modal -->
+    <div id="chatModal" class="modal" style="display: none;">
+        <div class="modal-overlay"></div>
+        <div class="modal-content chat-modal">
+            <div class="modal-header">
+                <h2 id="chatModalTitle">Message Coach</h2>
+                <button class="modal-close" id="chatModalCloseBtn" title="Close">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="chat-container">
+                    <div class="chat-messages" id="chatMessages">
+                        <div class="empty-state">
+                            <h3>Start a conversation</h3>
+                            <p>Send your first message to begin</p>
+                        </div>
+                    </div>
+                    
+                    <div class="example-messages">
+                        <h4>Quick Messages</h4>
+                        <div class="example-message-buttons">
+                            <button class="example-btn" data-message="Hi! I'm interested in improving my skills. Can you help me?">
+                                👋 Introduction
+                            </button>
+                            <button class="example-btn" data-message="I'd like to schedule a training session. What are your available times?">
+                                📅 Schedule Training
+                            </button>
+                            <button class="example-btn" data-message="I have some questions about proper technique. Could you provide some guidance?">
+                                ❓ Technique Questions
+                            </button>
+                            <button class="example-btn" data-message="I'm preparing for a competition. Do you have any specific training recommendations?">
+                                🏆 Competition Prep
+                            </button>
+                            <button class="example-btn" data-message="Thank you for your help! I really appreciate the guidance.">
+                                🙏 Thank You
+                            </button>
+                            <button class="example-btn" data-message="I'd like to know more about your coaching philosophy and approach.">
+                                🎯 Coaching Style
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="chat-input-area">
+                        <textarea id="chatMessageInput" placeholder="Type your message here..." rows="3"></textarea>
+                        <button id="chatSendBtn" class="btn-connect">Send Message</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Payment Modal -->
+    <div id="paymentModal" class="modal" style="display: none;">
+        <div class="modal-overlay"></div>
+        <div class="modal-content payment-modal">
+            <div class="modal-header">
+                <h2 id="paymentModalTitle">Complete Registration</h2>
+                <button class="modal-close" id="paymentModalCloseBtn" title="Close">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="payment-container">
+                    <div class="payment-details">
+                        <h3>Event Registration Payment</h3>
+                        <div id="eventPaymentDetails" class="event-details">
+                            <!-- Event details will be populated here -->
+                        </div>
+                    </div>
+                    
+                    <div class="payment-form">
+                        <h4>Payment Information</h4>
+                        <div id="payment-element">
+                            <!-- Stripe Elements will be mounted here -->
+                        </div>
+                        <div id="payment-message" class="payment-message"></div>
+                        
+                        <div class="payment-actions">
+                            <button id="submit-payment" class="btn-connect" disabled>
+                                <span id="button-text">Complete Payment</span>
+                                <div id="payment-spinner" class="spinner hidden">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" fill="none" opacity="0.25"/>
+                                        <path d="M12 2a10 10 0 0 1 10 10" stroke="currentColor" stroke-width="4" fill="none" stroke-linecap="round"/>
+                                    </svg>
+                                </div>
+                            </button>
+                            <button id="cancel-payment" class="btn-connect" style="background: #6b7280;">Cancel</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global state
+        let currentUser = null;
+        let authToken = localStorage.getItem('authToken');
+        let coaches = [];
+        let connections = [];
+        let pendingRequests = [];
+        let currentConversation = null;
+
+        // Navigation
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', () => {
+                const section = item.dataset.section;
+                switchSection(section);
+                
+                // Update active nav item
+                document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
+                item.classList.add('active');
+            });
+        });
+
+        function switchSection(sectionName) {
+            // Hide all sections
+            document.querySelectorAll('.dashboard-section').forEach(section => {
+                section.classList.add('hidden');
+            });
+            
+            // Show selected section
+            const targetSection = document.getElementById(`${sectionName}-section`);
+            if (targetSection) {
+                targetSection.classList.remove('hidden');
+            }
+
+            // Load section data
+            switch(sectionName) {
+                case 'coaches':
+                    loadCoaches();
+                    break;
+                case 'connections':
+                    loadConnections();
+                    break;
+                case 'clinics':
+                    loadClinics();
+                    break;
+                case 'messages':
+                    loadMessages();
+                    break;
+                case 'account':
+                    loadAccountSettings();
+                    break;
+            }
+        }
+
+        // Check authentication and load user data
+        async function checkAuth() {
+            if (!authToken) {
+                console.log('No auth token, redirecting to login');
+                window.location.href = '/';
+                return;
+            }
+
+            // Prevent infinite redirect loops
+            const lastRedirect = sessionStorage.getItem('lastRedirect');
+            const now = Date.now();
+            if (lastRedirect && (now - parseInt(lastRedirect)) < 5000) {
+                console.error('Preventing infinite redirect loop');
+                localStorage.removeItem('authToken');
+                sessionStorage.removeItem('lastRedirect');
+                window.location.href = '/';
+                return;
+            }
+
+            try {
+                console.log('Fetching user profile...');
+                const response = await fetch('/api/users/profile', {
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (response.ok) {
+                    const userData = await response.json();
+                    console.log('User data received:', { role: userData.role, name: userData.first_name });
+                    
+                    if (userData.role !== 'athlete') {
+                        console.log('User is not an athlete, redirecting...');
+                        sessionStorage.setItem('lastRedirect', now.toString());
+                        window.location.href = '/clinician-dashboard.html';
+                        return;
+                    }
+                    
+                    currentUser = userData;
+                    document.getElementById('user-name').textContent = `${userData.first_name} ${userData.last_name}`;
+                    
+                    // Load initial data
+                    loadCoaches();
+                } else {
+                    console.error('Failed to fetch user profile');
+                    localStorage.removeItem('authToken');
+                    window.location.href = '/';
+                }
+            } catch (error) {
+                console.error('Auth check error:', error);
+                localStorage.removeItem('authToken');
+                window.location.href = '/';
+            }
+        }
+
+        // Diagnostic function for debugging (can be called from browser console)
+        window.debugAuth = async function() {
+            console.log('=== Authentication Debug ===');
+            console.log('Auth token:', authToken ? 'Present' : 'Missing');
+            console.log('Token length:', authToken ? authToken.length : 0);
+            console.log('Current user:', currentUser);
+            console.log('User role:', currentUser?.role);
+            
+            if (authToken) {
+                try {
+                    const response = await fetch('/api/users/profile', {
+                        headers: {
+                            'Authorization': `Bearer ${authToken}`,
+                            'Content-Type': 'application/json'
+                        }
+                    });
+                    
+                    console.log('Profile fetch status:', response.status);
+                    if (response.ok) {
+                        const data = await response.json();
+                        console.log('Profile data:', data);
+                    } else {
+                        console.log('Profile fetch error:', await response.text());
+                    }
+                } catch (error) {
+                    console.error('Profile fetch exception:', error);
+                }
+            }
+        };
+
+        // Load pending follow requests
+        async function loadPendingRequests() {
+            try {
+                const response = await fetch('/api/follows/sent', {
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    pendingRequests = data.pendingRequests || [];
+                    console.log('Pending requests loaded:', pendingRequests);
+                } else {
+                    console.error('Failed to load pending requests');
+                    pendingRequests = [];
+                }
+            } catch (error) {
+                console.error('Error loading pending requests:', error);
+                pendingRequests = [];
+            }
+        }
+
+        // Check if coach has pending request
+        function hasPendingRequest(clinicianId) {
+            return pendingRequests.some(req => req.clinician_id === clinicianId && req.status === 'pending');
+        }
+
+        // Load coaches
+        async function loadCoaches() {
+            console.log('Loading coaches...');
+            const loadingEl = document.getElementById('coaches-loading');
+            const gridEl = document.getElementById('coaches-grid');
+            
+            if (!loadingEl || !gridEl) {
+                console.error('Required elements not found');
+                return;
+            }
+            
+            loadingEl.classList.remove('hidden');
+            gridEl.classList.add('hidden');
+
+            try {
+                // Load pending requests first
+                await loadPendingRequests();
+                
+                console.log('Making API call to /api/users/clinicians');
+                const response = await fetch('/api/users/clinicians', {
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                console.log('API response status:', response.status);
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    console.log('Raw API response:', data);
+                    coaches = data.clinicians || [];
+                    console.log('Coaches extracted:', coaches);
+                    displayCoaches(coaches);
+                } else {
+                    console.error('Failed to load coaches', response.status, response.statusText);
+                    try {
+                        const errorData = await response.json();
+                        console.error('Error response:', errorData);
+                    } catch (e) {
+                        const errorText = await response.text();
+                        console.error('Error response (text):', errorText);
+                    }
+                    
+                    // Show error in UI
+                    gridEl.innerHTML = '<div class="empty-state"><h3>Error loading coaches</h3><p>Please try refreshing the page</p></div>';
+                    gridEl.classList.remove('hidden');
+                }
+            } catch (error) {
+                console.error('Error loading coaches:', error);
+                // Show error in UI
+                gridEl.innerHTML = '<div class="empty-state"><h3>Error loading coaches</h3><p>Please check your connection and try again</p></div>';
+                gridEl.classList.remove('hidden');
+            } finally {
+                loadingEl.classList.add('hidden');
+            }
+        }
+
+        // Display coaches
+        function displayCoaches(coachesData) {
+            const gridEl = document.getElementById('coaches-grid');
+            gridEl.innerHTML = '';
+
+            if (!coachesData || !Array.isArray(coachesData) || coachesData.length === 0) {
+                gridEl.innerHTML = '<div class="empty-state"><h3>No coaches available</h3><p>Check back later for new coaches!</p></div>';
+            } else {
+                coachesData.forEach(coach => {
+                    const coachCard = createCoachCard(coach);
+                    gridEl.appendChild(coachCard);
+                });
+            }
+
+            gridEl.classList.remove('hidden');
+        }
+
+        // Create coach card element
+        function createCoachCard(coach) {
+            const card = document.createElement('div');
+            card.className = 'coach-card';
+            
+            // Debug coach data structure
+            console.log('Creating coach card for:', {
+                coach,
+                clinician_id: coach.clinician_id,
+                user_id: coach.user_id,
+                id: coach.id,
+                allKeys: Object.keys(coach)
+            });
+            
+            const initials = (coach.first_name[0] + coach.last_name[0]).toUpperCase();
+            const specialties = coach.specialties || [];
+            const experience = coach.years_experience || 0;
+            
+            // Create location display - check multiple possible fields
+            const location = coach.location || 
+                             (coach.city && coach.state ? `${coach.city}, ${coach.state}` : coach.city || coach.state) ||
+                             'Location not specified';
+            
+            // Create avatar HTML with profile image support
+            let avatarHTML;
+            if (coach.profile_image_url) {
+                avatarHTML = `<div class="coach-avatar" style="background-image: url('${coach.profile_image_url}'); background-size: cover; background-position: center;"></div>`;
+            } else {
+                avatarHTML = `<div class="coach-avatar">${initials}</div>`;
+            }
+            
+            // Check if this coach has a pending request
+            const isPending = hasPendingRequest(coach.clinician_id);
+            const connectButtonClass = isPending ? 'btn-connect btn-pending' : 'btn-connect btn-connect-coach';
+            const connectButtonText = isPending ? 'Request Pending' : 'Connect';
+            const connectButtonDisabled = isPending ? 'disabled' : '';
+
+            card.innerHTML = `
+                <div class="coach-header">
+                    ${avatarHTML}
+                    <div class="coach-info">
+                        <h3>${coach.first_name} ${coach.last_name}</h3>
+                        <div class="coach-school">${coach.verified ? '✓ Verified Coach' : 'Independent Coach'}</div>
+                        <div class="coach-location">📍 ${location}</div>
+                    </div>
+                </div>
+                <div class="coach-details">
+                    <div class="coach-specialties">
+                        ${specialties.map(specialty => `<span class="coach-specialty">${specialty}</span>`).join('')}
+                    </div>
+                    <div class="coach-experience">⭐ ${experience} years experience</div>
+                </div>
+                <div class="coach-actions">
+                    <button class="btn-connect btn-view-profile" data-coach-id="${coach.clinician_id}">
+                        View Profile
+                    </button>
+                    <button class="${connectButtonClass}" data-coach-id="${coach.clinician_id}" ${connectButtonDisabled}>
+                        ${connectButtonText}
+                    </button>
+                    <button class="btn-connect btn-message" data-coach-id="${coach.clinician_id}" style="display: none;">
+                        Message
+                    </button>
+                </div>
+            `;
+
+            // Add event listeners to avoid CSP issues
+            const viewProfileBtn = card.querySelector('.btn-view-profile');
+            const connectBtn = card.querySelector('.btn-connect-coach, .btn-pending');
+            const messageBtn = card.querySelector('.btn-message');
+            
+            viewProfileBtn.addEventListener('click', () => {
+                viewCoachProfile(coach.clinician_id);
+            });
+            
+            if (connectBtn && !connectBtn.disabled) {
+                connectBtn.addEventListener('click', (e) => {
+                    connectWithCoach(coach.clinician_id, e.target);
+                });
+            }
+            
+            if (messageBtn) {
+                messageBtn.addEventListener('click', () => {
+                    openConversation(coach.clinician_id);
+                });
+            }
+
+            // Check connection status and show appropriate buttons
+            checkConnectionStatus(coach.clinician_id).then(isConnected => {
+                if (isConnected) {
+                    connectBtn.style.display = 'none';
+                    messageBtn.style.display = 'inline-block';
+                } else {
+                    connectBtn.style.display = 'inline-block';
+                    messageBtn.style.display = 'none';
+                }
+            });
+
+            return card;
+        }
+
+        // View coach profile
+        async function viewCoachProfile(clinicianId) {
+            const modal = document.getElementById('coachProfileModal');
+            const content = document.getElementById('coachProfileContent');
+            
+            // Show modal
+            modal.style.display = 'flex';
+            content.innerHTML = '<div class="loading">Loading profile...</div>';
+            
+            try {
+                const response = await fetch(`/api/users/clinicians/${clinicianId}`, {
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    displayCoachProfile(data.clinician);
+                } else {
+                    content.innerHTML = '<div class="empty-state"><h3>Error loading profile</h3><p>Please try again later</p></div>';
+                }
+            } catch (error) {
+                console.error('Error loading coach profile:', error);
+                content.innerHTML = '<div class="empty-state"><h3>Error loading profile</h3><p>Please check your connection</p></div>';
+            }
+        }
+
+        // Display coach profile in modal
+        function displayCoachProfile(coach) {
+            const content = document.getElementById('coachProfileContent');
+            const user = coach.users || {};
+            const initials = `${user.first_name?.[0] || ''}${user.last_name?.[0] || ''}`.toUpperCase();
+            
+            // Create avatar HTML with profile image support
+            let avatarHTML;
+            if (user.profile_image_url) {
+                avatarHTML = `<div class="coach-profile-avatar" style="background-image: url('${user.profile_image_url}'); background-size: cover; background-position: center;"></div>`;
+            } else {
+                avatarHTML = `<div class="coach-profile-avatar">${initials}</div>`;
+            }
+            
+            content.innerHTML = `
+                <div class="coach-profile-header">
+                    ${avatarHTML}
+                    <div class="coach-profile-info">
+                        <h3>${user.first_name} ${user.last_name}</h3>
+                        <div class="coach-school">${coach.verified ? '✓ Verified Coach' : 'Independent Coach'}</div>
+                        <div class="coach-profile-bio">${user.bio || 'No bio provided'}</div>
+                    </div>
+                </div>
+                
+                <div class="coach-profile-details">
+                    <div class="detail-section">
+                        <h4>🎯 Specialties</h4>
+                        <div class="profile-specialties">
+                            ${(coach.specialties || []).map(specialty => 
+                                `<span class="profile-specialty-tag">${specialty}</span>`
+                            ).join('')}
+                        </div>
+                    </div>
+                    
+                    <div class="detail-section">
+                        <h4>📊 Experience & Stats</h4>
+                        <div class="detail-grid">
+                            <div class="detail-item">
+                                <span class="detail-label">Years of Experience</span>
+                                <span class="detail-value">${coach.years_experience || 0} years</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Rating</span>
+                                <span class="detail-value">⭐ ${coach.rating || 'Not rated yet'}</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Total Reviews</span>
+                                <span class="detail-value">${coach.total_reviews || 0} reviews</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Verified Status</span>
+                                <span class="detail-value">${coach.verified ? '✅ Verified' : '⏳ Pending verification'}</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    ${coach.certifications && coach.certifications.length > 0 ? `
+                    <div class="detail-section">
+                        <h4>🏆 Certifications</h4>
+                        <div class="profile-specialties">
+                            ${coach.certifications.map(cert => 
+                                `<span class="profile-specialty-tag">${cert}</span>`
+                            ).join('')}
+                        </div>
+                    </div>
+                    ` : ''}
+                    
+                    <div class="detail-section">
+                        <h4>📅 Recent Events</h4>
+                        ${coach.recentEvents && coach.recentEvents.length > 0 ? 
+                            coach.recentEvents.map(event => `
+                                <div style="margin-bottom: 1rem; padding: 1rem; background: white; border-radius: 8px;">
+                                    <h5 style="margin: 0 0 0.5rem 0; color: #1a202c;">${event.title}</h5>
+                                    <p style="margin: 0; color: #4a5568; font-size: 0.9rem;">
+                                        📅 ${new Date(event.start_date).toLocaleDateString()}<br>
+                                        📍 ${event.location}<br>
+                                        💰 $${event.price} • ${event.current_registrations}/${event.max_athletes} athletes
+                                    </p>
+                                </div>
+                            `).join('') : 
+                            '<p style="color: #4a5568;">No upcoming events</p>'
+                        }
+                    </div>
+                </div>
+                
+                <div class="coach-actions" style="margin-top: 2rem; padding-top: 1rem; border-top: 1px solid #e2e8f0;">
+                    <button class="btn-connect ${hasPendingRequest(coach.clinician_id) ? 'btn-pending' : 'btn-modal-connect'}" 
+                            data-clinician-id="${coach.clinician_id}" 
+                            data-first-name="${user.first_name}"
+                            ${hasPendingRequest(coach.clinician_id) ? 'disabled' : ''}>
+                        ${hasPendingRequest(coach.clinician_id) ? 'Request Pending' : `Connect with ${user.first_name}`}
+                    </button>
+                    <button class="btn-connect btn-modal-message" 
+                            data-clinician-id="${coach.clinician_id}" 
+                            data-first-name="${user.first_name}"
+                            style="display: none;">
+                        Message ${user.first_name}
+                    </button>
+                    <button class="btn-connect btn-modal-close" style="background: #6b7280;">
+                        Close
+                    </button>
+                </div>
+            `;
+            
+            // Add event listeners for modal buttons
+            const modalConnectBtn = content.querySelector('.btn-modal-connect, .btn-pending');
+            const modalMessageBtn = content.querySelector('.btn-modal-message');
+            const modalCloseBtn = content.querySelector('.btn-modal-close');
+            
+            if (modalConnectBtn && !modalConnectBtn.disabled) {
+                modalConnectBtn.addEventListener('click', () => {
+                    const clinicianId = modalConnectBtn.getAttribute('data-clinician-id');
+                    connectWithCoach(clinicianId, modalConnectBtn);
+                    closeCoachProfile();
+                });
+            }
+            
+            if (modalMessageBtn) {
+                modalMessageBtn.addEventListener('click', () => {
+                    const clinicianId = modalMessageBtn.getAttribute('data-clinician-id');
+                    closeCoachProfile();
+                    openConversation(clinicianId);
+                });
+            }
+            
+            modalCloseBtn.addEventListener('click', () => {
+                closeCoachProfile();
+            });
+            
+            // Check connection status and show appropriate buttons
+            checkConnectionStatus(coach.clinician_id).then(isConnected => {
+                if (isConnected) {
+                    modalConnectBtn.style.display = 'none';
+                    modalMessageBtn.style.display = 'inline-block';
+                } else {
+                    modalConnectBtn.style.display = 'inline-block';
+                    modalMessageBtn.style.display = 'none';
+                }
+            });
+        }
+
+        // Close coach profile modal
+        function closeCoachProfile() {
+            const modal = document.getElementById('coachProfileModal');
+            if (modal) {
+                modal.style.display = 'none';
+                // Clear the content when closing
+                const content = document.getElementById('coachProfileContent');
+                if (content) {
+                    content.innerHTML = '<div class="loading">Loading profile...</div>';
+                }
+            }
+        }
+
+        // Initialize modal close event listeners
+        function initializeModalEventListeners() {
+            // Close button
+            const closeBtn = document.getElementById('coachProfileCloseBtn');
+            if (closeBtn) {
+                closeBtn.addEventListener('click', closeCoachProfile);
+            }
+
+            // Close when clicking overlay
+            const modal = document.getElementById('coachProfileModal');
+            const overlay = modal?.querySelector('.modal-overlay');
+            if (overlay) {
+                overlay.addEventListener('click', closeCoachProfile);
+            }
+
+            // Close with Escape key
+            document.addEventListener('keydown', function(event) {
+                if (event.key === 'Escape') {
+                    const modal = document.getElementById('coachProfileModal');
+                    if (modal && modal.style.display !== 'none') {
+                        closeCoachProfile();
+                    }
+                }
+            });
+        }
+
+        // Check connection status
+        async function checkConnectionStatus(clinicianId) {
+            try {
+                const response = await fetch('/api/follows/following', {
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    return data.following.some(f => f.clinician_id === clinicianId && f.status === 'accepted');
+                }
+                return false;
+            } catch (error) {
+                console.error('Error checking connection status:', error);
+                return false;
+            }
+        }
+
+        // Show toast message
+        function showToast(message, type = 'info') {
+            // Remove existing messages
+            const existingMessage = document.querySelector('.toast-message');
+            if (existingMessage) {
+                existingMessage.remove();
+            }
+
+            // Create message element
+            const messageEl = document.createElement('div');
+            messageEl.className = `toast-message toast-${type}`;
+            messageEl.textContent = message;
+            
+            // Add styles
+            messageEl.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                padding: 15px 20px;
+                border-radius: 8px;
+                color: white;
+                font-weight: 500;
+                z-index: 10000;
+                max-width: 400px;
+                transform: translateX(100%);
+                transition: transform 0.3s ease;
+                ${type === 'success' ? 'background-color: #10b981;' : ''}
+                ${type === 'error' ? 'background-color: #ef4444;' : ''}
+                ${type === 'info' ? 'background-color: #3b82f6;' : ''}
+            `;
+
+            document.body.appendChild(messageEl);
+
+            // Animate in
+            setTimeout(() => {
+                messageEl.style.transform = 'translateX(0)';
+            }, 100);
+
+            // Remove after 5 seconds
+            setTimeout(() => {
+                messageEl.style.transform = 'translateX(100%)';
+                setTimeout(() => {
+                    if (messageEl.parentNode) {
+                        messageEl.remove();
+                    }
+                }, 300);
+            }, 5000);
+        }
+
+        // Load clinics
+        async function loadClinics() {
+            const loadingEl = document.getElementById('clinics-loading');
+            const listEl = document.getElementById('clinics-list');
+            
+            if (!loadingEl || !listEl) {
+                console.error('Required elements not found');
+                return;
+            }
+            
+            loadingEl.classList.remove('hidden');
+            listEl.classList.add('hidden');
+
+            try {
+                const response = await fetch('/api/events', {
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    const clinics = data.events || [];
+                    displayClinics(clinics);
+                } else {
+                    console.error('Failed to load clinics');
+                    listEl.innerHTML = '<div class="empty-state"><h3>Error loading clinics</h3><p>Please try refreshing the page</p></div>';
+                    listEl.classList.remove('hidden');
+                }
+            } catch (error) {
+                console.error('Error loading clinics:', error);
+                listEl.innerHTML = '<div class="empty-state"><h3>Error loading clinics</h3><p>Please check your connection and try again</p></div>';
+                listEl.classList.remove('hidden');
+            } finally {
+                loadingEl.classList.add('hidden');
+            }
+        }
+
+        // Display clinics
+        function displayClinics(clinicsData) {
+            const listEl = document.getElementById('clinics-list');
+            listEl.innerHTML = '';
+
+            if (!clinicsData || !Array.isArray(clinicsData) || clinicsData.length === 0) {
+                listEl.innerHTML = '<div class="empty-state"><h3>No clinics available</h3><p>Check back later for new training events!</p></div>';
+            } else {
+                clinicsData.forEach(clinic => {
+                    const clinicItem = createClinicItem(clinic);
+                    listEl.appendChild(clinicItem);
+                });
+            }
+
+            listEl.classList.remove('hidden');
+        }
+
+        // Create clinic item element
+        function createClinicItem(clinic) {
+            const item = document.createElement('div');
+            item.className = 'clinic-item';
+            
+            const startDate = new Date(clinic.start_date);
+            const endDate = new Date(clinic.end_date);
+            const isFull = clinic.current_registrations >= clinic.max_athletes;
+            const isRegistered = clinic.is_registered || false;
+            
+            let buttonClass = 'btn-connect';
+            let buttonText = 'Register';
+            let buttonDisabled = '';
+            
+            if (isRegistered) {
+                buttonClass = 'btn-registered';
+                buttonText = 'Registered';
+                buttonDisabled = 'disabled';
+            } else if (isFull) {
+                buttonClass = 'btn-full';
+                buttonText = 'Full';
+                buttonDisabled = 'disabled';
+            }
+
+            item.innerHTML = `
+                <div class="event-header">
+                    <h3 class="event-title">${clinic.title}</h3>
+                    <div class="event-price">$${clinic.price}</div>
+                </div>
+                <div class="event-meta">
+                    <strong>📅 Date:</strong> ${startDate.toLocaleDateString()} - ${endDate.toLocaleDateString()}<br>
+                    <strong>📍 Location:</strong> ${clinic.location}<br>
+                    <strong>👥 Capacity:</strong> ${clinic.current_registrations}/${clinic.max_athletes} athletes
+                </div>
+                <div class="event-description">${clinic.description}</div>
+                ${clinic.required_items && clinic.required_items.length > 0 ? `
+                <div class="event-requirements">
+                    <strong>Required Items:</strong><br>
+                    ${clinic.required_items.map(item => `• ${item}`).join('<br>')}
+                </div>
+                ` : ''}
+                <div class="coach-actions">
+                    <button class="${buttonClass}" data-clinic-id="${clinic.id}" ${buttonDisabled}>
+                        ${buttonText}
+                    </button>
+                </div>
+            `;
+
+            // Add event listener for registration
+            const registerBtn = item.querySelector('.btn-connect');
+            if (registerBtn && !registerBtn.disabled) {
+                registerBtn.addEventListener('click', () => {
+                    registerForClinic(clinic.id, clinic.price, clinic.title);
+                });
+            }
+
+            return item;
+        }
+
+        // Register for clinic
+        async function registerForClinic(clinicId, price, title) {
+            try {
+                const response = await fetch(`/api/events/${clinicId}/register`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (response.ok) {
+                    showToast('Successfully registered for clinic!', 'success');
+                    // Refresh clinics list
+                    loadClinics();
+                } else {
+                    const error = await response.json();
+                    showToast(error.error || 'Failed to register for clinic', 'error');
+                }
+            } catch (error) {
+                console.error('Registration error:', error);
+                showToast('Failed to register for clinic', 'error');
+            }
+        }
+
+        // Load messages
+        async function loadMessages() {
+            const loadingEl = document.getElementById('conversations-loading');
+            const listEl = document.getElementById('conversations-list');
+            
+            if (!loadingEl || !listEl) {
+                console.error('Required elements not found');
+                return;
+            }
+            
+            loadingEl.classList.remove('hidden');
+            listEl.innerHTML = '';
+
+            try {
+                console.log('Loading conversations...');
+                const response = await fetch('/api/messages/conversations', {
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                console.log('Conversations response status:', response.status);
+
+                if (response.ok) {
+                    const contentType = response.headers.get('content-type');
+                    if (!contentType || !contentType.includes('application/json')) {
+                        console.error('Conversations response is not JSON:', contentType);
+                        const text = await response.text();
+                        console.error('Response text:', text.substring(0, 200));
+                        listEl.innerHTML = '<div class="empty-state"><h3>Invalid response format</h3><p>Please try refreshing the page</p></div>';
+                        return;
+                    }
+                    
+                    const data = await response.json();
+                    console.log('Conversations data received:', data);
+                    const conversations = data.conversations || [];
+                    displayConversations(conversations);
+                } else {
+                    console.error('Failed to load conversations:', response.status, response.statusText);
+                    const errorText = await response.text();
+                    console.error('Error response body:', errorText);
+                    listEl.innerHTML = '<div class="empty-state"><h3>Error loading conversations</h3><p>Please try refreshing the page</p></div>';
+                }
+            } catch (error) {
+                console.error('Error loading conversations:', error);
+                listEl.innerHTML = '<div class="empty-state"><h3>Error loading conversations</h3><p>Please check your connection and try again</p></div>';
+            } finally {
+                loadingEl.classList.add('hidden');
+            }
+        }
+
+        // Display conversations
+        function displayConversations(conversationsData) {
+            const listEl = document.getElementById('conversations-list');
+            listEl.innerHTML = '';
+
+            if (!conversationsData || !Array.isArray(conversationsData) || conversationsData.length === 0) {
+                listEl.innerHTML = '<div class="empty-state"><h3>No conversations</h3><p>Start connecting with coaches to begin messaging!</p></div>';
+            } else {
+                console.log('Displaying conversations:', conversationsData);
+                conversationsData.forEach(conversation => {
+                    const conversationItem = createConversationItem(conversation);
+                    if (conversationItem) {
+                        listEl.appendChild(conversationItem);
+                    }
+                });
+            }
+        }
+
+        // Create conversation item element (using exact same approach as clinician dashboard)
+        function createConversationItem(conversation) {
+            const item = document.createElement('div');
+            item.className = 'conversation-item';
+            
+            console.log('Creating conversation item:', conversation);
+            
+            // Use exact same data structure as clinician dashboard
+            const partnerName = conversation.partner_name || 'Unknown User';
+            const partnerId = conversation.partner_id;
+            
+            // Create avatar HTML with profile image support (same as clinician)
+            const avatarHTML = conversation.partner_profile_image ? 
+                `<img src="${conversation.partner_profile_image}" alt="${partnerName}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">` :
+                partnerName.split(' ').map(n => n[0]).join('');
+            
+            item.innerHTML = `
+                <div class="conversation-avatar">
+                    ${avatarHTML}
+                </div>
+                <div class="conversation-info">
+                    <div class="conversation-name">${partnerName}</div>
+                    <div class="conversation-last-message">${conversation.last_message || 'No messages yet'}</div>
+                    <div class="conversation-time">${conversation.last_message_at ? new Date(conversation.last_message_at).toLocaleDateString() : ''}</div>
+                </div>
+                ${conversation.unread_count > 0 ? `<div class="unread-count">${conversation.unread_count}</div>` : ''}
+            `;
+
+            // Use exact same data attributes as clinician dashboard
+            item.setAttribute('data-user-id', partnerId);
+            item.setAttribute('data-user-name', partnerName);
+            
+            // Add click listener (same as clinician)
+            item.addEventListener('click', () => {
+                console.log('Conversation clicked:', { partnerId, partnerName });
+                selectConversation(partnerId, partnerName);
+            });
+
+            return item;
+        }
+
+        // Select and load a conversation (exact same as clinician dashboard)
+        async function selectConversation(userId, userName) {
+            currentConversation = { userId, userName };
+            
+            // Update UI to show selected conversation
+            const messageHeader = document.getElementById('current-conversation');
+            const messagesList = document.getElementById('messages-content');
+            const inputArea = document.getElementById('message-input-area');
+            
+            console.log('Selecting conversation:', { userId, userName, messageHeader, messagesList, inputArea });
+            console.log('Setting conversation header to:', userName);
+            
+            if (messageHeader) {
+                messageHeader.textContent = userName || 'Unknown User';
+                console.log('Header element updated, new text:', messageHeader.textContent);
+            } else {
+                console.error('Message header element not found!');
+            }
+            if (inputArea) inputArea.classList.remove('hidden');
+            
+            // Mark conversation as active
+            document.querySelectorAll('.conversation-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            document.querySelector(`[data-user-id="${userId}"]`)?.classList.add('active');
+            
+            // Show loading state
+            if (messagesList) {
+                messagesList.innerHTML = '<div class="loading">Loading messages...</div>';
+            }
+            
+            // Load messages
+            try {
+                // Add cache-busting parameter
+                const timestamp = new Date().getTime();
+                const response = await fetch(`/api/messages/conversation/${userId}?_t=${timestamp}`, {
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`,
+                        'Content-Type': 'application/json',
+                        'Cache-Control': 'no-cache'
+                    }
+                });
+
+                console.log('Messages response:', response.status);
+
+                if (response.ok) {
+                    const data = await response.json();
+                    console.log('Messages data:', data);
+                    displayMessages(data.messages || []);
+                } else {
+                    const errorText = await response.text();
+                    console.error('Failed to load messages:', response.status, errorText);
+                    if (messagesList) {
+                        messagesList.innerHTML = '<div class="empty-state"><p>Failed to load messages</p></div>';
+                    }
+                }
+            } catch (error) {
+                console.error('Error loading messages:', error);
+                if (messagesList) {
+                    messagesList.innerHTML = '<div class="empty-state"><p>Error loading messages</p></div>';
+                }
+            }
+        }
+
+        // Display messages in conversation (exact same as clinician dashboard)
+        function displayMessages(messages) {
+            const messagesList = document.getElementById('messages-content');
+            
+            console.log('Displaying messages:', { 
+                messagesCount: messages.length, 
+                messagesList: !!messagesList,
+                currentUser: currentUser?.user_id,
+                messages: messages
+            });
+            
+            if (!messagesList) return;
+            
+            if (messages.length === 0) {
+                messagesList.innerHTML = '<div class="empty-state"><h3>No messages yet</h3><p>Start the conversation by sending a message!</p></div>';
+                return;
+            }
+
+            messagesList.innerHTML = messages.map(message => {
+                const isOwnMessage = message.sender_id === currentUser?.user_id;
+                const messageTime = new Date(message.sent_at).toLocaleString();
+                
+                return `
+                    <div class="message ${isOwnMessage ? 'own-message' : 'other-message'}">
+                        <div class="message-content">${message.content}</div>
+                        <div class="message-time">${messageTime}</div>
+                    </div>
+                `;
+            }).join('');
+            
+            // Scroll to bottom
+            messagesList.scrollTop = messagesList.scrollHeight;
+        }
+
+
+
+        // Create message element
+        function createMessageElement(message) {
+            const messageEl = document.createElement('div');
+            const isOwnMessage = message.sender_id === currentUser.user_id;
+            messageEl.className = `message ${isOwnMessage ? 'own-message' : 'other-message'}`;
+            
+            messageEl.innerHTML = `
+                <div class="message-content">${message.content}</div>
+                <div class="message-time">${new Date(message.sent_at).toLocaleString()}</div>
+            `;
+            
+            return messageEl;
+        }
+
+        // Send message (exact same as clinician dashboard)
+        async function sendMessage() {
+            const messageInput = document.getElementById('message-input');
+            const content = messageInput.value.trim();
+            
+            if (!content || !currentConversation) return;
+            
+            try {
+                const response = await fetch('/api/messages/send', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        receiverId: currentConversation.userId,
+                        content: content
+                    })
+                });
+
+                if (response.ok) {
+                    messageInput.value = '';
+                    // Reload messages to show the new one
+                    selectConversation(currentConversation.userId, currentConversation.userName);
+                } else {
+                    const errorData = await response.json();
+                    showToast(errorData.error || 'Failed to send message', 'error');
+                }
+            } catch (error) {
+                console.error('Error sending message:', error);
+                showToast('Error sending message. Please try again.', 'error');
+            }
+        }
+
+        // Initialize message event listeners (exact same as clinician dashboard)
+        function initializeMessageEventListeners() {
+            const sendBtn = document.getElementById('send-message-btn');
+            const messageInput = document.getElementById('message-input');
+            
+            if (sendBtn && messageInput) {
+                sendBtn.addEventListener('click', sendMessage);
+                messageInput.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter' && !e.shiftKey) {
+                        e.preventDefault();
+                        sendMessage();
+                    }
+                });
+            }
+        }
+
+        // Connect with coach
+        async function connectWithCoach(clinicianId, buttonElement) {
+            try {
+                // Add diagnostic logging
+                console.log('Starting connect request:', {
+                    clinicianId,
+                    clinicianIdType: typeof clinicianId,
+                    authToken: authToken ? 'present' : 'missing',
+                    tokenLength: authToken ? authToken.length : 0,
+                    userRole: currentUser?.role,
+                    currentUser: currentUser
+                });
+
+                // Log all available coaches for debugging
+                console.log('Available coaches:', coaches.map(c => ({
+                    id: c.clinician_id || c.user_id,
+                    name: `${c.first_name} ${c.last_name}`,
+                    idType: typeof (c.clinician_id || c.user_id)
+                })));
+
+                // Verify we have both token and user data
+                if (!authToken) {
+                    console.error('No auth token available');
+                    showToast('Please log in again', 'error');
+                    return;
+                }
+
+                if (!currentUser || currentUser.role !== 'athlete') {
+                    console.error('User role issue:', currentUser?.role);
+                    showToast('User role verification failed', 'error');
+                    return;
+                }
+
+                const response = await fetch('/api/follows/request', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ clinicianId })
+                });
+
+                console.log('Follow request response:', {
+                    status: response.status,
+                    statusText: response.statusText,
+                    headers: Object.fromEntries(response.headers.entries())
+                });
+
+                if (response.ok) {
+                    // Update button state
+                    const button = buttonElement || event.target;
+                    button.textContent = 'Request Pending';
+                    button.className = 'btn-connect btn-pending';
+                    button.disabled = true;
+                    
+                    // Reload pending requests to update state
+                    await loadPendingRequests();
+                    
+                    // Update all coach cards to reflect new state
+                    displayCoaches(coaches);
+                    
+                    // Show toast or notification
+                    showToast('Connection request sent successfully!', 'success');
+                } else {
+                    const error = await response.json().catch(() => ({ error: 'Unknown error' }));
+                    console.error('Follow request failed:', {
+                        status: response.status,
+                        error,
+                        requestedId: clinicianId,
+                        debugInfo: error.debug
+                    });
+                    
+                    // Show detailed error for debugging
+                    let errorMessage = error.error || `Failed to send connection request (${response.status})`;
+                    if (error.debug && error.debug.availableIds) {
+                        console.log('Available clinician IDs:', error.debug.availableIds);
+                        errorMessage += ` (Requested: ${clinicianId}, Available: ${error.debug.availableIds.join(', ')})`;
+                    }
+                    
+                    showToast(errorMessage, 'error');
+                }
+            } catch (error) {
+                console.error('Connect error:', error);
+                showToast('Failed to send connection request', 'error');
+            }
+        }
+
+        // Load connections
+        async function loadConnections() {
+            const loadingEl = document.getElementById('connections-loading');
+            const gridEl = document.getElementById('connections-grid');
+            const emptyEl = document.getElementById('connections-empty');
+            
+            loadingEl.classList.remove('hidden');
+            gridEl.classList.add('hidden');
+            emptyEl.classList.add('hidden');
+
+            try {
+                const response = await fetch('/api/follows/following', {
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    connections = data.following.filter(f => f.status === 'accepted');
+                    displayConnections(connections);
+                } else {
+                    console.error('Failed to load connections');
+                }
+            } catch (error) {
+                console.error('Error loading connections:', error);
+            } finally {
+                loadingEl.classList.add('hidden');
+            }
+        }
+
+        // Display connections
+        function displayConnections(connectionsData) {
+            const gridEl = document.getElementById('connections-grid');
+            const emptyEl = document.getElementById('connections-empty');
+            gridEl.innerHTML = '';
+
+            if (connectionsData.length === 0) {
+                emptyEl.classList.remove('hidden');
+            } else {
+                connectionsData.forEach(connection => {
+                    const connectionCard = createConnectionCard(connection);
+                    gridEl.appendChild(connectionCard);
+                });
+                gridEl.classList.remove('hidden');
+            }
+        }
+
+        // Create connection card element
+        function createConnectionCard(connection) {
+            const card = document.createElement('div');
+            card.className = 'connection-card';
+            
+            const coach = connection.clinician_profiles;
+            const initials = (coach.users.first_name[0] + coach.users.last_name[0]).toUpperCase();
+            
+            // Create location display - check multiple possible fields including nested structure
+            const location = coach.location || 
+                             (coach.city && coach.state ? `${coach.city}, ${coach.state}` : coach.city || coach.state) ||
+                             (coach.users.city && coach.users.state ? `${coach.users.city}, ${coach.users.state}` : coach.users.city || coach.users.state) ||
+                             'Location not specified';
+            
+            // Create avatar HTML with profile image support
+            let avatarHTML;
+            if (coach.users.profile_image_url) {
+                avatarHTML = `<div class="coach-avatar" style="background-image: url('${coach.users.profile_image_url}'); background-size: cover; background-position: center;"></div>`;
+            } else {
+                avatarHTML = `<div class="coach-avatar">${initials}</div>`;
+            }
+            
+            card.innerHTML = `
+                <div class="coach-header">
+                    ${avatarHTML}
+                    <div class="coach-info">
+                        <h3>${coach.users.first_name} ${coach.users.last_name}</h3>
+                        <div class="coach-school">${coach.verified ? '✓ Verified Coach' : 'Independent Coach'}</div>
+                        <div class="coach-location">📍 ${location}</div>
+                    </div>
+                </div>
+                <div class="coach-details">
+                    <div class="coach-specialties">
+                        ${(coach.specialties || []).map(specialty => `<span class="coach-specialty">${specialty}</span>`).join('')}
+                    </div>
+                    <div class="coach-experience">⭐ ${coach.years_experience || 0} years experience</div>
+                </div>
+                <div class="coach-actions">
+                    <button class="btn-connect btn-message" data-clinician-id="${coach.clinician_id}">
+                        Message
+                    </button>
+                </div>
+            `;
+
+            // Add event listener for messaging
+            const messageBtn = card.querySelector('.btn-message');
+            if (messageBtn) {
+                messageBtn.addEventListener('click', () => {
+                    openConversation(coach.clinician_id);
+                });
+            }
+
+            return card;
+        }
+
+        // Account Settings Functions
+        async function loadAccountSettings() {
+            const loadingEl = document.getElementById('account-loading');
+            const contentEl = document.getElementById('account-content');
+            
+            if (!loadingEl || !contentEl || !currentUser) return;
+            
+            loadingEl.classList.remove('hidden');
+            contentEl.classList.add('hidden');
+
+            try {
+                // Get full profile data
+                const response = await fetch('/api/users/profile', {
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (response.ok) {
+                    const profileData = await response.json();
+                    displayAccountSettings(profileData);
+                    loadingEl.classList.add('hidden');
+                    contentEl.classList.remove('hidden');
+                } else {
+                    throw new Error('Failed to load profile');
+                }
+            } catch (error) {
+                console.error('Failed to load account settings:', error);
+                loadingEl.classList.add('hidden');
+                contentEl.innerHTML = '<div class="empty-state"><h3>Error loading account details</h3><p>Please try again later.</p></div>';
+                contentEl.classList.remove('hidden');
+            }
+        }
+
+        function displayAccountSettings(profile) {
+            // Update profile information
+            document.getElementById('first-name').value = profile.first_name || '';
+            document.getElementById('last-name').value = profile.last_name || '';
+            document.getElementById('email').value = profile.email || '';
+            document.getElementById('bio').value = profile.bio || '';
+
+            // Update athlete profile
+            if (profile.athlete_profile) {
+                document.getElementById('age').value = profile.athlete_profile.age || '';
+                document.getElementById('skill-level').value = profile.athlete_profile.skill_level || 'beginner';
+                document.getElementById('team-affiliation').value = profile.athlete_profile.team_affiliation || '';
+                document.getElementById('location').value = profile.athlete_profile.location || '';
+                document.getElementById('goals').value = profile.athlete_profile.goals || '';
+            }
+
+            // Update profile picture
+            updateProfilePicture(profile.profile_image_url);
+
+            // Update statistics
+            if (profile.stats) {
+                document.getElementById('following-count').textContent = profile.stats.followingCount || 0;
+                document.getElementById('events-count').textContent = profile.stats.eventsCount || 0;
+            }
+
+            // Update member since date
+            const memberSince = profile.created_at ? new Date(profile.created_at).toLocaleDateString() : '-';
+            document.getElementById('member-since').textContent = memberSince;
+        }
+
+        function updateProfilePicture(imageUrl) {
+            const avatarEl = document.getElementById('profile-avatar');
+            const initialsEl = document.getElementById('profile-initials');
+            const removeBtn = document.getElementById('remove-photo-btn');
+
+            if (imageUrl) {
+                avatarEl.style.backgroundImage = `url(${imageUrl})`;
+                initialsEl.style.display = 'none';
+                removeBtn.style.display = 'block';
+            } else {
+                avatarEl.style.backgroundImage = 'none';
+                initialsEl.style.display = 'block';
+                removeBtn.style.display = 'none';
+                
+                // Set initials
+                const firstName = document.getElementById('first-name').value || '';
+                const lastName = document.getElementById('last-name').value || '';
+                const initials = (firstName[0] + lastName[0]).toUpperCase() || 'CN';
+                initialsEl.textContent = initials;
+            }
+        }
+
+        async function saveAccountSettings() {
+            const saveBtn = document.getElementById('save-settings-btn');
+            const originalText = saveBtn.textContent;
+            
+            try {
+                saveBtn.textContent = '💾 Saving...';
+                saveBtn.disabled = true;
+
+                const formData = {
+                    first_name: document.getElementById('first-name').value,
+                    last_name: document.getElementById('last-name').value,
+                    bio: document.getElementById('bio').value,
+                    athlete_profile: {
+                        age: parseInt(document.getElementById('age').value) || null,
+                        skill_level: document.getElementById('skill-level').value,
+                        team_affiliation: document.getElementById('team-affiliation').value,
+                        location: document.getElementById('location').value,
+                        goals: document.getElementById('goals').value
+                    }
+                };
+
+                const response = await fetch('/api/users/profile', {
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(formData)
+                });
+
+                if (response.ok) {
+                    showToast('Account settings saved successfully!', 'success');
+                    // Reload user data
+                    await checkAuth();
+                } else {
+                    const error = await response.json();
+                    showToast(error.error || 'Failed to save settings', 'error');
+                }
+            } catch (error) {
+                console.error('Save settings error:', error);
+                showToast('Failed to save settings', 'error');
+            } finally {
+                saveBtn.textContent = originalText;
+                saveBtn.disabled = false;
+            }
+        }
+
+        function resetAccountSettings() {
+            if (confirm('Are you sure you want to reset all settings to default? This cannot be undone.')) {
+                loadAccountSettings();
+                showToast('Settings reset to default', 'info');
+            }
+        }
+
+        // Initialize event listeners
+        function initializeEventListeners() {
+            // Logout button
+            const logoutBtn = document.getElementById('logout-btn');
+            if (logoutBtn) {
+                logoutBtn.addEventListener('click', () => {
+                    localStorage.removeItem('authToken');
+                    sessionStorage.removeItem('lastRedirect');
+                    window.location.href = '/';
+                });
+            }
+
+            // Account settings buttons
+            const saveSettingsBtn = document.getElementById('save-settings-btn');
+            const resetSettingsBtn = document.getElementById('reset-settings-btn');
+            const profileImageInput = document.getElementById('profile-image-input');
+            const removePhotoBtn = document.getElementById('remove-photo-btn');
+
+            if (saveSettingsBtn) {
+                saveSettingsBtn.addEventListener('click', saveAccountSettings);
+            }
+
+            if (resetSettingsBtn) {
+                resetSettingsBtn.addEventListener('click', resetAccountSettings);
+            }
+
+            if (profileImageInput) {
+                profileImageInput.addEventListener('change', handleProfileImageUpload);
+            }
+
+            if (removePhotoBtn) {
+                removePhotoBtn.addEventListener('click', removeProfilePhoto);
+            }
+
+            // Initialize modal event listeners
+            initializeModalEventListeners();
+            
+            // Initialize message event listeners
+            initializeMessageEventListeners();
+        }
+
+        async function handleProfileImageUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            try {
+                const formData = new FormData();
+                formData.append('image', file);
+                formData.append('type', 'profile');
+
+                const response = await fetch('/api/upload/profile', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`
+                    },
+                    body: formData
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    updateProfilePicture(data.imageUrl);
+                    showToast('Profile picture updated successfully!', 'success');
+                } else {
+                    const error = await response.json();
+                    showToast(error.error || 'Failed to upload image', 'error');
+                }
+            } catch (error) {
+                console.error('Profile image upload error:', error);
+                showToast('Failed to upload image', 'error');
+            }
+        }
+
+        async function removeProfilePhoto() {
+            try {
+                const response = await fetch('/api/users/profile', {
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ profile_image_url: null })
+                });
+
+                if (response.ok) {
+                    updateProfilePicture(null);
+                    showToast('Profile picture removed', 'success');
+                } else {
+                    const error = await response.json();
+                    showToast(error.error || 'Failed to remove photo', 'error');
+                }
+            } catch (error) {
+                console.error('Remove photo error:', error);
+                showToast('Failed to remove photo', 'error');
+            }
+        }
+
+        // Initialize everything when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeEventListeners();
+            checkAuth();
+        });
+    </script>
+</body>
+</html>

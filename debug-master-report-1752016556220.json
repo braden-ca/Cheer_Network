@@ -1,0 +1,497 @@
+{
+  "timestamp": "2025-07-08T23:15:56.220Z",
+  "duration": "3.51 seconds",
+  "suites": [
+    {
+      "suite": "Database",
+      "report": {
+        "timestamp": "2025-07-08T23:15:55.936Z",
+        "summary": {
+          "totalTests": 31,
+          "errors": 12,
+          "successes": 20
+        },
+        "results": [
+          {
+            "timestamp": "2025-07-08T23:15:52.709Z",
+            "type": "INFO",
+            "message": "🔌 Testing Database Connection..."
+          },
+          {
+            "timestamp": "2025-07-08T23:15:53.135Z",
+            "type": "SUCCESS",
+            "message": "✅ Database connection successful"
+          },
+          {
+            "timestamp": "2025-07-08T23:15:53.135Z",
+            "type": "INFO",
+            "message": "📊 Testing Table Structures..."
+          },
+          {
+            "timestamp": "2025-07-08T23:15:53.250Z",
+            "type": "SUCCESS",
+            "message": "✅ Table 'users' exists and accessible"
+          },
+          {
+            "timestamp": "2025-07-08T23:15:53.250Z",
+            "type": "SUCCESS",
+            "message": "✅ All required columns exist in 'users'"
+          },
+          {
+            "timestamp": "2025-07-08T23:15:53.250Z",
+            "type": "INFO",
+            "message": "  Available columns: user_id, role, first_name, last_name, bio, profile_image_url, email_verified, created_at, updated_at"
+          },
+          {
+            "timestamp": "2025-07-08T23:15:53.375Z",
+            "type": "SUCCESS",
+            "message": "✅ Table 'clinician_profiles' exists and accessible"
+          },
+          {
+            "timestamp": "2025-07-08T23:15:53.375Z",
+            "type": "INFO",
+            "message": "  Available columns: clinician_id, specialties, years_experience, certifications, location, hourly_rate, verified, rating, total_reviews, created_at, updated_at"
+          },
+          {
+            "timestamp": "2025-07-08T23:15:53.601Z",
+            "type": "INFO",
+            "message": "🔍 Testing Data Integrity..."
+          },
+          {
+            "timestamp": "2025-07-08T23:15:53.722Z",
+            "type": "SUCCESS",
+            "message": "✅ Users table queryable: 2 records"
+          },
+          {
+            "timestamp": "2025-07-08T23:15:53.723Z",
+            "type": "SUCCESS",
+            "message": "✅ User 1 has valid required data"
+          },
+          {
+            "timestamp": "2025-07-08T23:15:53.723Z",
+            "type": "SUCCESS",
+            "message": "✅ User 2 has valid required data"
+          },
+          {
+            "timestamp": "2025-07-08T23:15:53.960Z",
+            "type": "SUCCESS",
+            "message": "✅ Clinician profiles table queryable: 1 records"
+          },
+          {
+            "timestamp": "2025-07-08T23:15:54.183Z",
+            "type": "INFO",
+            "message": "🔗 Testing Join Queries..."
+          },
+          {
+            "timestamp": "2025-07-08T23:15:54.408Z",
+            "type": "SUCCESS",
+            "message": "✅ Follow relationships query successful: 0 records"
+          },
+          {
+            "timestamp": "2025-07-08T23:15:54.408Z",
+            "type": "INFO",
+            "message": "🔒 Testing RLS Policies..."
+          },
+          {
+            "timestamp": "2025-07-08T23:15:54.770Z",
+            "type": "SUCCESS",
+            "message": "✅ Clinician profiles accessible"
+          },
+          {
+            "timestamp": "2025-07-08T23:15:54.937Z",
+            "type": "SUCCESS",
+            "message": "✅ Users table accessible"
+          },
+          {
+            "timestamp": "2025-07-08T23:15:54.937Z",
+            "type": "SUCCESS",
+            "message": "✅ RLS policies appear to be configured correctly"
+          },
+          {
+            "timestamp": "2025-07-08T23:15:54.937Z",
+            "type": "INFO",
+            "message": "✏️ Testing CRUD Operations..."
+          },
+          {
+            "timestamp": "2025-07-08T23:15:55.188Z",
+            "type": "INFO",
+            "message": "📇 Testing Database Performance..."
+          },
+          {
+            "timestamp": "2025-07-08T23:15:55.302Z",
+            "type": "SUCCESS",
+            "message": "✅ Users query executed in 113ms"
+          },
+          {
+            "timestamp": "2025-07-08T23:15:55.410Z",
+            "type": "SUCCESS",
+            "message": "✅ Clinicians query executed in 107ms"
+          },
+          {
+            "timestamp": "2025-07-08T23:15:55.534Z",
+            "type": "SUCCESS",
+            "message": "✅ Database performance appears optimal"
+          },
+          {
+            "timestamp": "2025-07-08T23:15:55.535Z",
+            "type": "INFO",
+            "message": "🔗 Testing Database Constraints..."
+          },
+          {
+            "timestamp": "2025-07-08T23:15:55.671Z",
+            "type": "SUCCESS",
+            "message": "✅ Foreign key constraints are working"
+          },
+          {
+            "timestamp": "2025-07-08T23:15:55.935Z",
+            "type": "SUCCESS",
+            "message": "✅ Users table constraints working"
+          },
+          {
+            "timestamp": "2025-07-08T23:15:55.936Z",
+            "type": "SUCCESS",
+            "message": "✅ User role \"clinician\" is valid"
+          },
+          {
+            "timestamp": "2025-07-08T23:15:55.936Z",
+            "type": "SUCCESS",
+            "message": "✅ User role \"athlete\" is valid"
+          },
+          {
+            "timestamp": "2025-07-08T23:15:55.936Z",
+            "type": "SUCCESS",
+            "message": "✅ Database constraints appear to be properly configured"
+          },
+          {
+            "timestamp": "2025-07-08T23:15:55.936Z",
+            "type": "INFO",
+            "message": "📊 Generating Database Debug Report..."
+          }
+        ],
+        "errors": [
+          {
+            "timestamp": "2025-07-08T23:15:53.375Z",
+            "type": "ERROR",
+            "message": "Missing columns in 'clinician_profiles': city, state, current_school",
+            "error": null
+          },
+          {
+            "timestamp": "2025-07-08T23:15:53.500Z",
+            "type": "ERROR",
+            "message": "Table 'specialties_lookup' not accessible",
+            "error": "relation \"public.specialties_lookup\" does not exist"
+          },
+          {
+            "timestamp": "2025-07-08T23:15:53.600Z",
+            "type": "ERROR",
+            "message": "Table 'schools_lookup' not accessible",
+            "error": "relation \"public.schools_lookup\" does not exist"
+          },
+          {
+            "timestamp": "2025-07-08T23:15:53.961Z",
+            "type": "ERROR",
+            "message": "Clinician 1 missing required data: {\"clinician_id\":\"9ea4608a-7d7b-4d86-88ba-fa742d1090b4\",\"specialties\":[],\"years_experience\":0,\"certifications\":[],\"location\":null,\"hourly_rate\":null,\"verified\":false,\"rating\":0,\"total_reviews\":0,\"created_at\":\"2025-07-08T06:14:52.212244+00:00\",\"updated_at\":\"2025-07-08T06:14:52.212244+00:00\"}",
+            "error": null
+          },
+          {
+            "timestamp": "2025-07-08T23:15:54.069Z",
+            "type": "ERROR",
+            "message": "Failed to query specialties_lookup table",
+            "error": "relation \"public.specialties_lookup\" does not exist"
+          },
+          {
+            "timestamp": "2025-07-08T23:15:54.183Z",
+            "type": "ERROR",
+            "message": "Failed to query schools_lookup table",
+            "error": "relation \"public.schools_lookup\" does not exist"
+          },
+          {
+            "timestamp": "2025-07-08T23:15:54.300Z",
+            "type": "ERROR",
+            "message": "Join query failed",
+            "error": "column clinician_profiles.city does not exist"
+          },
+          {
+            "timestamp": "2025-07-08T23:15:54.522Z",
+            "type": "ERROR",
+            "message": "Lookup table access failed",
+            "error": "relation \"public.specialties_lookup\" does not exist"
+          },
+          {
+            "timestamp": "2025-07-08T23:15:55.067Z",
+            "type": "ERROR",
+            "message": "INSERT operation failed",
+            "error": {}
+          },
+          {
+            "timestamp": "2025-07-08T23:15:55.188Z",
+            "type": "ERROR",
+            "message": "School INSERT failed",
+            "error": {}
+          },
+          {
+            "timestamp": "2025-07-08T23:15:55.534Z",
+            "type": "ERROR",
+            "message": "Lookup tables query performance test failed",
+            "error": "relation \"public.specialties_lookup\" does not exist"
+          },
+          {
+            "timestamp": "2025-07-08T23:15:55.793Z",
+            "type": "ERROR",
+            "message": "Specialties lookup constraint test failed",
+            "error": "relation \"public.specialties_lookup\" does not exist"
+          }
+        ]
+      },
+      "timestamp": "2025-07-08T23:15:55.938Z"
+    },
+    {
+      "suite": "Upload System",
+      "report": {
+        "timestamp": "2025-07-08T23:15:55.944Z",
+        "summary": {
+          "totalTests": 33,
+          "errors": 1,
+          "successes": 24
+        },
+        "results": [
+          {
+            "timestamp": "2025-07-08T23:15:55.938Z",
+            "type": "INFO",
+            "message": "📁 Testing Upload Directory Structure..."
+          },
+          {
+            "timestamp": "2025-07-08T23:15:55.938Z",
+            "type": "SUCCESS",
+            "message": "✅ Directory exists: public"
+          },
+          {
+            "timestamp": "2025-07-08T23:15:55.939Z",
+            "type": "SUCCESS",
+            "message": "✅ Directory writable: public"
+          },
+          {
+            "timestamp": "2025-07-08T23:15:55.939Z",
+            "type": "SUCCESS",
+            "message": "✅ Directory exists: public/uploads"
+          },
+          {
+            "timestamp": "2025-07-08T23:15:55.940Z",
+            "type": "SUCCESS",
+            "message": "✅ Directory writable: public/uploads"
+          },
+          {
+            "timestamp": "2025-07-08T23:15:55.940Z",
+            "type": "SUCCESS",
+            "message": "✅ Directory exists: public/uploads/profiles"
+          },
+          {
+            "timestamp": "2025-07-08T23:15:55.940Z",
+            "type": "SUCCESS",
+            "message": "✅ Directory writable: public/uploads/profiles"
+          },
+          {
+            "timestamp": "2025-07-08T23:15:55.940Z",
+            "type": "INFO",
+            "message": "📋 Testing File Validation Logic..."
+          },
+          {
+            "timestamp": "2025-07-08T23:15:55.941Z",
+            "type": "SUCCESS",
+            "message": "✅ Validation correct for valid.jpg: valid"
+          },
+          {
+            "timestamp": "2025-07-08T23:15:55.941Z",
+            "type": "SUCCESS",
+            "message": "✅ Validation correct for valid.png: valid"
+          },
+          {
+            "timestamp": "2025-07-08T23:15:55.941Z",
+            "type": "SUCCESS",
+            "message": "✅ Validation correct for invalid.txt: invalid"
+          },
+          {
+            "timestamp": "2025-07-08T23:15:55.941Z",
+            "type": "SUCCESS",
+            "message": "✅ Validation correct for toolarge.jpg: invalid"
+          },
+          {
+            "timestamp": "2025-07-08T23:15:55.941Z",
+            "type": "SUCCESS",
+            "message": "✅ Validation correct for noextension: invalid"
+          },
+          {
+            "timestamp": "2025-07-08T23:15:55.941Z",
+            "type": "INFO",
+            "message": "⚙️ Testing Multer Configuration..."
+          },
+          {
+            "timestamp": "2025-07-08T23:15:55.941Z",
+            "type": "SUCCESS",
+            "message": "✅ Multer package is installed"
+          },
+          {
+            "timestamp": "2025-07-08T23:15:55.941Z",
+            "type": "SUCCESS",
+            "message": "✅ Multer TypeScript types are installed"
+          },
+          {
+            "timestamp": "2025-07-08T23:15:55.942Z",
+            "type": "SUCCESS",
+            "message": "✅ Upload route file exists"
+          },
+          {
+            "timestamp": "2025-07-08T23:15:55.942Z",
+            "type": "SUCCESS",
+            "message": "✅ Multer configuration found in route"
+          },
+          {
+            "timestamp": "2025-07-08T23:15:55.942Z",
+            "type": "SUCCESS",
+            "message": "✅ File filter configuration found"
+          },
+          {
+            "timestamp": "2025-07-08T23:15:55.942Z",
+            "type": "SUCCESS",
+            "message": "✅ File size limits configuration found"
+          },
+          {
+            "timestamp": "2025-07-08T23:15:55.942Z",
+            "type": "INFO",
+            "message": "🖼️ Testing Image Processing..."
+          },
+          {
+            "timestamp": "2025-07-08T23:15:55.942Z",
+            "type": "SUCCESS",
+            "message": "✅ Unique filename generation works for test.jpg"
+          },
+          {
+            "timestamp": "2025-07-08T23:15:55.942Z",
+            "type": "SUCCESS",
+            "message": "✅ Unique filename generation works for test.png"
+          },
+          {
+            "timestamp": "2025-07-08T23:15:55.942Z",
+            "type": "SUCCESS",
+            "message": "✅ Unique filename generation works for test.gif"
+          },
+          {
+            "timestamp": "2025-07-08T23:15:55.942Z",
+            "type": "INFO",
+            "message": "Full path: C:\\Users\\Braden Smelser\\Desktop\\Cheer_Network\\public\\uploads\\profiles\\test-profile.jpg"
+          },
+          {
+            "timestamp": "2025-07-08T23:15:55.943Z",
+            "type": "INFO",
+            "message": "Relative path: uploads\\profiles\\test-profile.jpg"
+          },
+          {
+            "timestamp": "2025-07-08T23:15:55.943Z",
+            "type": "SUCCESS",
+            "message": "✅ File path generation works correctly"
+          },
+          {
+            "timestamp": "2025-07-08T23:15:55.943Z",
+            "type": "INFO",
+            "message": "🔧 Testing Server Integration..."
+          },
+          {
+            "timestamp": "2025-07-08T23:15:55.943Z",
+            "type": "SUCCESS",
+            "message": "✅ Upload routes registered in server"
+          },
+          {
+            "timestamp": "2025-07-08T23:15:55.943Z",
+            "type": "SUCCESS",
+            "message": "✅ Static file serving configured"
+          },
+          {
+            "timestamp": "2025-07-08T23:15:55.943Z",
+            "type": "SUCCESS",
+            "message": "✅ Public directory exists for static serving"
+          },
+          {
+            "timestamp": "2025-07-08T23:15:55.943Z",
+            "type": "INFO",
+            "message": "🔌 Testing Upload Endpoint..."
+          },
+          {
+            "timestamp": "2025-07-08T23:15:55.944Z",
+            "type": "INFO",
+            "message": "📊 Generating Upload Debug Report..."
+          }
+        ],
+        "errors": [
+          {
+            "timestamp": "2025-07-08T23:15:55.943Z",
+            "type": "ERROR",
+            "message": "Upload endpoint test failed",
+            "error": "fetch is not a function"
+          }
+        ]
+      },
+      "timestamp": "2025-07-08T23:15:55.944Z"
+    },
+    {
+      "suite": "Comprehensive",
+      "error": "Assignment to constant variable.",
+      "timestamp": "2025-07-08T23:15:56.217Z"
+    }
+  ],
+  "system": {
+    "nodeVersion": "v24.3.0",
+    "platform": "win32",
+    "arch": "x64",
+    "workingDirectory": "C:\\Users\\Braden Smelser\\Desktop\\Cheer_Network"
+  },
+  "logs": [
+    "[2025-07-08T23:15:52.707Z] [MASTER] 🚀 Starting Master Debug Suite - Comprehensive Analysis",
+    "[2025-07-08T23:15:52.709Z] [INFO] ================================================================================",
+    "[2025-07-08T23:15:52.709Z] [SUITE] \n🔧 Running Database Debug Suite...",
+    "[2025-07-08T23:15:52.709Z] [INFO] 📋 Testing database schema, RLS, and operations",
+    "[2025-07-08T23:15:52.709Z] [INFO] ------------------------------------------------------------",
+    "[2025-07-08T23:15:55.938Z] [SUCCESS] ✅ Database Debug Suite completed",
+    "[2025-07-08T23:15:55.938Z] [INFO]    Successes: 20",
+    "[2025-07-08T23:15:55.938Z] [INFO]    Errors: 12",
+    "[2025-07-08T23:15:55.938Z] [SUITE] \n🔧 Running Upload System Debug Suite...",
+    "[2025-07-08T23:15:55.938Z] [INFO] 📋 Testing file upload functionality",
+    "[2025-07-08T23:15:55.938Z] [INFO] ------------------------------------------------------------",
+    "[2025-07-08T23:15:55.944Z] [SUCCESS] ✅ Upload System Debug Suite completed",
+    "[2025-07-08T23:15:55.944Z] [INFO]    Successes: 24",
+    "[2025-07-08T23:15:55.944Z] [INFO]    Errors: 1",
+    "[2025-07-08T23:15:55.945Z] [SUITE] \n🔧 Running Comprehensive Debug Suite...",
+    "[2025-07-08T23:15:55.945Z] [INFO] 📋 Testing backend APIs and integrations",
+    "[2025-07-08T23:15:55.945Z] [INFO] ------------------------------------------------------------",
+    "[2025-07-08T23:15:56.217Z] [ERROR] ❌ Comprehensive Debug Suite failed: Assignment to constant variable.",
+    "[2025-07-08T23:15:56.217Z] [INTEGRATION] \n🔗 Testing System Integration...",
+    "[2025-07-08T23:15:56.217Z] [ERROR] ❌ Server is not running or not accessible",
+    "[2025-07-08T23:15:56.217Z] [INFO]    Make sure to run \"npm run dev\" to start the server",
+    "[2025-07-08T23:15:56.217Z] [FILES] \n📁 Checking critical file structure...",
+    "[2025-07-08T23:15:56.218Z] [SUCCESS] ✅ src/server.ts exists",
+    "[2025-07-08T23:15:56.218Z] [SUCCESS] ✅ src/routes/auth.ts exists",
+    "[2025-07-08T23:15:56.218Z] [SUCCESS] ✅ src/routes/users.ts exists",
+    "[2025-07-08T23:15:56.218Z] [SUCCESS] ✅ src/routes/upload.ts exists",
+    "[2025-07-08T23:15:56.218Z] [SUCCESS] ✅ public/index.html exists",
+    "[2025-07-08T23:15:56.218Z] [SUCCESS] ✅ public/script.js exists",
+    "[2025-07-08T23:15:56.218Z] [SUCCESS] ✅ package.json exists",
+    "[2025-07-08T23:15:56.219Z] [SUCCESS] ✅ .env exists",
+    "[2025-07-08T23:15:56.219Z] [ANALYSIS] \n📊 Analyzing Overall System Health...",
+    "[2025-07-08T23:15:56.219Z] [STATS] \n📈 OVERALL STATISTICS:",
+    "[2025-07-08T23:15:56.219Z] [INFO]    Total Tests Run: 64",
+    "[2025-07-08T23:15:56.219Z] [SUCCESS]    Successful Tests: 44",
+    "[2025-07-08T23:15:56.219Z] [ERROR]    Failed Tests: 13",
+    "[2025-07-08T23:15:56.219Z] [INFO]    Success Rate: 68.8%",
+    "[2025-07-08T23:15:56.219Z] [WARNING] ⚠️ SYSTEM HEALTH: NEEDS ATTENTION",
+    "[2025-07-08T23:15:56.219Z] [ACTIONS] \n📋 Generating Action Items...",
+    "[2025-07-08T23:15:56.219Z] [ACTIONS] \n🎯 RECOMMENDED ACTIONS:",
+    "[2025-07-08T23:15:56.219Z] [ACTION]    1. 🔧 Database: Clinician 1 missing required data: {\"clinician_id\":\"9ea4608a-7d7b-4d86-88ba-fa742d1090b4\",\"specialties\":[],\"years_experience\":0,\"certifications\":[],\"location\":null,\"hourly_rate\":null,\"verified\":false,\"rating\":0,\"total_reviews\":0,\"created_at\":\"2025-07-08T06:14:52.212244+00:00\",\"updated_at\":\"2025-07-08T06:14:52.212244+00:00\"}",
+    "[2025-07-08T23:15:56.219Z] [ACTION]    2. ⚠️ Database: Join query failed",
+    "[2025-07-08T23:15:56.220Z] [ACTION]    3. ⚠️ Database: Lookup table access failed",
+    "[2025-07-08T23:15:56.220Z] [ACTION]    4. ⚠️ Database: INSERT operation failed",
+    "[2025-07-08T23:15:56.220Z] [ACTION]    5. ⚠️ Database: School INSERT failed",
+    "[2025-07-08T23:15:56.220Z] [ACTION]    6. ⚠️ Database: Lookup tables query performance test failed",
+    "[2025-07-08T23:15:56.220Z] [ACTION]    7. ⚠️ Database: Specialties lookup constraint test failed",
+    "[2025-07-08T23:15:56.220Z] [ACTION]    8. ⚠️ Upload System: Upload endpoint test failed",
+    "[2025-07-08T23:15:56.220Z] [REPORT] \n📄 Generating Comprehensive Report..."
+  ]
+}

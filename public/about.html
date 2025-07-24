@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us - The Cheer Network</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        
+        .about-hero {
+            background: linear-gradient(135deg, #4169E1 0%, #5B9BD5 100%);
+            color: white;
+            padding: 6rem 2rem 4rem;
+            text-align: center;
+        }
+        
+        .about-hero h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .about-hero p {
+            font-size: 1.3rem;
+            margin-bottom: 0;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .founders-section {
+            padding: 6rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            font-weight: 600;
+            color: #2D3748;
+            margin-bottom: 3rem;
+        }
+        
+        .founders-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 4rem;
+            margin-top: 4rem;
+        }
+        
+        .founder-card {
+            background: white;
+            border: 2px solid #4169E1;
+            border-radius: 20px;
+            padding: 2.5rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .founder-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+        
+        .founder-avatar {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #4169E1 0%, #5B9BD5 100%);
+            margin: 0 auto 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            font-weight: 600;
+            color: white;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .founder-name {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: #2D3748;
+            margin-bottom: 0.5rem;
+        }
+        
+        .founder-title {
+            font-size: 1.1rem;
+            color: #4169E1;
+            font-weight: 500;
+            margin-bottom: 1.5rem;
+        }
+        
+        .founder-bio {
+            color: #4A5568;
+            line-height: 1.6;
+            font-size: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .achievements {
+            background: #f7fafc;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-top: 1.5rem;
+        }
+        
+        .achievements h4 {
+            color: #2D3748;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .achievement-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .achievement-list li {
+            padding: 0.5rem 0;
+            color: #4A5568;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .achievement-list li:before {
+            content: '🏆';
+            font-size: 1.2rem;
+        }
+        
+        .mission-section {
+            background: linear-gradient(135deg, #F1F4F8 0%, #EDF2F7 100%);
+            padding: 6rem 2rem;
+            text-align: center;
+        }
+        
+        .mission-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .mission-text {
+            font-size: 1.2rem;
+            color: #4A5568;
+            line-height: 1.8;
+            margin-bottom: 3rem;
+        }
+        
+        .cta-button {
+            background: linear-gradient(135deg, #4169E1 0%, #5B9BD5 100%);
+            color: white;
+            padding: 1rem 2.5rem;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(65, 105, 225, 0.4);
+        }
+        
+        @media (max-width: 768px) {
+            .about-hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .founders-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+            
+            .founder-card {
+                padding: 1.5rem;
+            }
+            
+            .founders-section,
+            .mission-section {
+                padding: 4rem 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <h2>The Cheer Network</h2>
+            </div>
+            <div class="nav-menu">
+                <a href="/" class="nav-link">Home</a>
+                <a href="/#features" class="nav-link">Features</a>
+                <a href="/about.html" class="nav-link active">About</a>
+                <a href="/contact.html" class="nav-link">Contact</a>
+            </div>
+            <div class="nav-auth">
+                <button class="btn-secondary" id="login-btn">Log In</button>
+                <button class="btn-secondary" id="signup-btn">Get Started</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="about-hero">
+        <h1>About The Cheer Network</h1>
+        <p>Founded by champions, built for champions. Connecting the cheer community through innovation and passion.</p>
+    </section>
+
+    <!-- Founders Section -->
+    <section class="founders-section">
+        <h2 class="section-title">Meet Our Founders</h2>
+        
+        <div class="founders-grid">
+            <!-- Chance Rich -->
+            <div class="founder-card">
+                <div class="founder-avatar">CR</div>
+                <h3 class="founder-name">Chance Rich</h3>
+                <p class="founder-title">Co-Founder & CEO</p>
+                <p class="founder-bio">
+                    A former Division I athlete with a passion for technology and sports innovation. 
+                    Chance brings years of competitive experience and business acumen to The Cheer Network, 
+                    driving our mission to revolutionize how athletes connect with top-tier coaching.
+                </p>
+                <div class="achievements">
+                    <h4>🏅 Athletic Background</h4>
+                    <ul class="achievement-list">
+                        <li>Former Division I Athlete</li>
+                        <li>Competitive Sports Excellence</li>
+                        <li>Leadership & Team Building</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Bre Gonzales -->
+            <div class="founder-card">
+                <div class="founder-avatar">BG</div>
+                <h3 class="founder-name">Bre Gonzales</h3>
+                <p class="founder-title">Co-Founder & Head of Athletic Development</p>
+                <p class="founder-bio">
+                    A decorated champion and former Division I athlete, Bre brings unparalleled expertise in 
+                    competitive cheerleading. Her championship experience and deep understanding of athlete 
+                    development drives our platform's focus on excellence and growth.
+                </p>
+                <div class="achievements">
+                    <h4>🏅 Championship Legacy</h4>
+                    <ul class="achievement-list">
+                        <li>4-Time National Champion</li>
+                        <li>California Baptist University</li>
+                        <li>Former Division I Athlete</li>
+                        <li>Elite Competitive Experience</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Mission Section -->
+    <section class="mission-section">
+        <div class="mission-content">
+            <h2 class="section-title">Our Mission</h2>
+            <p class="mission-text">
+                At The Cheer Network, we believe every athlete deserves access to world-class coaching and mentorship. 
+                Drawing from our combined experience as Division I athletes and champions, we've created a platform 
+                that bridges the gap between aspiring cheerleaders and elite clinicians. Our goal is to foster 
+                growth, build community, and elevate the sport we love.
+            </p>
+            <a href="/" class="cta-button">Join Our Community</a>
+        </div>
+    </section>
+
+    <!-- Login Modal -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Welcome Back</h3>
+                <span class="close" id="close-login">&times;</span>
+            </div>
+            <div class="modal-body">
+                <form class="auth-form">
+                    <div class="form-group">
+                        <label for="login-email">Email</label>
+                        <input type="email" id="login-email" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="login-password">Password</label>
+                        <input type="password" id="login-password" name="password" required>
+                    </div>
+                    <button type="submit" class="btn-primary full-width">Log In</button>
+                </form>
+                <p class="auth-switch">
+                    Don't have an account? <a href="#" id="switch-to-signup">Sign up</a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Signup Modal -->
+    <div id="signupModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Join Cheer Network</h3>
+                <span class="close" id="close-signup">&times;</span>
+            </div>
+            <div class="modal-body">
+                <form class="auth-form">
+                    <div class="form-group">
+                        <label for="signup-role">I am a:</label>
+                        <select id="signup-role" name="role" required>
+                            <option value="">Select your role</option>
+                            <option value="athlete">Athlete/Cheerleader</option>
+                            <option value="clinician">Coach/Trainer</option>
+                        </select>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="signup-firstname">First Name</label>
+                            <input type="text" id="signup-firstname" name="firstName" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="signup-lastname">Last Name</label>
+                            <input type="text" id="signup-lastname" name="lastName" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="signup-email">Email</label>
+                        <input type="email" id="signup-email" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="signup-password">Password</label>
+                        <input type="password" id="signup-password" name="password" required>
+                    </div>
+                    <button type="submit" class="btn-primary full-width">Create Account</button>
+                </form>
+                <p class="auth-switch">
+                    Already have an account? <a href="#" id="switch-to-login">Log in</a>
+                </p>
+                <p class="coach-note" style="margin-top: 1rem; padding: 0.75rem; background: #f8fafc; border-radius: 6px; font-size: 0.9rem; color: #4a5568;">
+                    <strong>Coaches/Trainers:</strong> After creating your account, you'll be able to complete your detailed profile with specialties, certifications, and experience.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html> 

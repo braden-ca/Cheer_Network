@@ -1,0 +1,3342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clinician Dashboard - The Cheer Network</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        :root {
+            /* Royal Blue Light Color Palette */
+            --primary-base: #F5F5F5;
+            --secondary-base: #FAF0E6;
+            --tertiary-base: #F0FFFF;
+            --quaternary-base: #E2E8F0;
+            --primary-accent: #4169E1;
+            --secondary-accent: #5B9BD5;
+            --light-accent: #87CEEB;
+            --dark-accent: #0F4C95;
+            --text-primary: #2D3748;
+            --text-secondary: #4A5568;
+            --text-light: #718096;
+            --white: #FFFFFF;
+            --off-white: #FAFAFA;
+            --gray-100: #F7FAFC;
+            --gray-200: #EDF2F7;
+            --gray-300: #E2E8F0;
+            --gray-400: #CBD5E0;
+            --gray-500: #A0AEC0;
+            --gray-600: #718096;
+            --gray-700: #4A5568;
+            --gray-800: #2D3748;
+            --gray-900: #1A202C;
+            
+            /* Enhanced Typography */
+            --font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            --font-weight-light: 300;
+            --font-weight-normal: 400;
+            --font-weight-medium: 500;
+            --font-weight-semibold: 600;
+            --font-weight-bold: 700;
+            
+            /* Consistent Spacing */
+            --spacing-xs: 0.5rem;
+            --spacing-sm: 1rem;
+            --spacing-md: 1.5rem;
+            --spacing-lg: 2rem;
+            --spacing-xl: 3rem;
+            --spacing-2xl: 4rem;
+            --spacing-3xl: 5rem;
+            
+            /* Unified Border Radius */
+            --radius-sm: 0.375rem;
+            --radius-md: 0.5rem;
+            --radius-lg: 0.75rem;
+            --radius-xl: 1rem;
+            --radius-2xl: 1.25rem;
+            
+            /* Enhanced Shadows */
+            --shadow-sm: 0 1px 2px 0 rgba(65, 105, 225, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(65, 105, 225, 0.1), 0 2px 4px -1px rgba(65, 105, 225, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(65, 105, 225, 0.1), 0 4px 6px -2px rgba(65, 105, 225, 0.05);
+            --shadow-xl: 0 20px 25px -5px rgba(65, 105, 225, 0.1), 0 10px 10px -5px rgba(65, 105, 225, 0.04);
+            --shadow-accent: 0 10px 20px rgba(65, 105, 225, 0.15);
+            --shadow-dark: 0 10px 20px rgba(15, 76, 149, 0.2);
+        }
+
+        .dashboard-container {
+            min-height: 100vh;
+            background: linear-gradient(135deg, var(--primary-base) 0%, var(--secondary-base) 100%);
+        }
+        
+        .navbar {
+            background: linear-gradient(135deg, 
+                rgba(248, 249, 251, 0.95) 0%, 
+                rgba(241, 244, 248, 0.95) 50%, 
+                rgba(65, 105, 225, 0.08) 100%);
+            border-bottom: 2px solid var(--primary-accent);
+            color: var(--text-primary);
+            padding: 0;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 85px;
+            backdrop-filter: blur(15px);
+            box-shadow: var(--shadow-dark);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+        }
+        
+        .navbar-brand {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-md);
+            padding: 0 var(--spacing-lg);
+            border-right: 1px solid rgba(65, 105, 225, 0.2);
+            margin-right: var(--spacing-lg);
+            transition: transform 0.3s ease;
+        }
+
+        .navbar-brand:hover {
+            transform: translateY(-2px);
+        }
+        
+        .navbar-brand h2 {
+            color: var(--text-primary);
+            font-size: 1.6rem;
+            margin: 0;
+            font-weight: var(--font-weight-bold);
+        }
+        
+        .user-info {
+            margin-left: auto;
+            padding: 0 var(--spacing-lg);
+            text-align: right;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+        }
+        
+        .user-info h3 {
+            margin: 0;
+            font-size: 1.1rem;
+            color: var(--primary-accent);
+            font-weight: var(--font-weight-semibold);
+        }
+        
+        .user-role {
+            font-size: 0.9rem;
+            color: var(--primary-accent);
+            font-weight: var(--font-weight-medium);
+            margin-top: 2px;
+        }
+        
+        .nav-menu {
+            display: flex;
+            flex: 1;
+            gap: var(--spacing-xs);
+            align-items: center;
+        }
+        
+        .nav-item {
+            padding: 0 var(--spacing-lg);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: var(--font-weight-medium);
+            font-size: 1.05rem;
+            border-bottom: 3px solid transparent;
+            color: var(--text-primary);
+            height: 85px;
+            min-width: 140px;
+            text-decoration: none;
+            position: relative;
+            border-radius: var(--radius-md);
+        }
+
+        .nav-item::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 8px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, var(--primary-accent), var(--secondary-accent));
+            transition: width 0.3s ease;
+            border-radius: 1px;
+        }
+        
+        .nav-item:hover {
+            background: rgba(65, 105, 225, 0.08);
+            color: var(--primary-accent);
+        }
+
+        .nav-item:hover::after {
+            width: 60%;
+        }
+        
+        .nav-item.active {
+            background: linear-gradient(135deg, var(--dark-accent), var(--primary-accent));
+            font-weight: var(--font-weight-semibold);
+            color: var(--white);
+            box-shadow: inset 0 -3px 0 var(--primary-accent);
+        }
+
+        .nav-item.active::after {
+            width: 80%;
+        }
+        
+        .nav-item span {
+            white-space: nowrap;
+        }
+        
+        .main-content {
+            margin-top: 85px;
+            padding: var(--spacing-xl);
+            overflow-y: auto;
+            max-width: 1400px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--spacing-xl);
+            padding-bottom: var(--spacing-lg);
+            border-bottom: 2px solid rgba(212, 175, 55, 0.2);
+        }
+        
+        .dashboard-title {
+            font-size: 2.5rem;
+            font-weight: var(--font-weight-bold);
+            color: var(--text-primary);
+        }
+        
+        .section-content {
+            background: white;
+            border: 1px solid #E2E8F0;
+            border-radius: var(--radius-2xl);
+            padding: var(--spacing-xl);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            min-height: 600px;
+            color: var(--text-primary);
+            position: relative;
+        }
+
+        .section-content::before {
+            display: none;
+        }
+        
+        .section-title {
+            font-size: 2rem;
+            font-weight: var(--font-weight-bold);
+            margin-bottom: var(--spacing-xl);
+            color: var(--text-primary);
+            padding-bottom: var(--spacing-sm);
+            border-bottom: 2px solid var(--primary-accent);
+            display: inline-block;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: var(--spacing-xl);
+            margin-bottom: var(--spacing-2xl);
+        }
+        
+        .stat-card {
+            background: white;
+            border: 2px solid var(--primary-accent);
+            border-radius: var(--radius-xl);
+            padding: var(--spacing-xl);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s ease;
+            border-left: 4px solid var(--primary-accent);
+            color: var(--text-primary);
+            box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+        }
+
+        .stat-card::before {
+            display: none;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--primary-accent);
+            box-shadow: 0 8px 25px rgba(65,105,225,0.15);
+        }
+
+
+        
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: var(--font-weight-bold);
+            color: var(--text-primary);
+        }
+        
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 1rem;
+            margin-top: var(--spacing-sm);
+            font-weight: var(--font-weight-medium);
+        }
+        
+        .athletes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+            gap: var(--spacing-xl);
+            margin-top: var(--spacing-xl);
+        }
+        
+        .athlete-card {
+            background: white;
+            border: 2px solid var(--primary-accent);
+            border-radius: var(--radius-xl);
+            padding: var(--spacing-xl);
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            color: var(--text-primary);
+            box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+        }
+
+        .athlete-card::before {
+            display: none;
+        }
+        
+        .athlete-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--primary-accent);
+            box-shadow: 0 8px 25px rgba(65,105,225,0.15);
+        }
+
+
+        
+        .athlete-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .athlete-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-accent), var(--secondary-accent));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 1.2rem;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+        
+        .athlete-info {
+            flex: 1;
+        }
+        
+        .athlete-info h3 {
+            margin: 0 0 0.5rem 0;
+            color: #1a202c;
+            font-size: 1.1rem;
+        }
+        
+        .athlete-details {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+        
+        .athlete-details span {
+            background: #f7fafc;
+            color: #4a5568;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+        }
+        
+        .athlete-bio {
+            margin: 1rem 0;
+            color: #4a5568;
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+        
+        .athlete-actions {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+        
+        .athlete-date {
+            margin-top: 1rem;
+            font-size: 0.8rem;
+            color: #718096;
+            padding-top: 1rem;
+            border-top: 1px solid #e2e8f0;
+        }
+        
+        .status-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .status-badge.pending {
+            background: #fef5e7;
+            color: #d69e2e;
+            border: 1px solid #f6e05e;
+        }
+        
+        .status-badge.accepted {
+            background: #f0fff4;
+            color: #38a169;
+            border: 1px solid #9ae6b4;
+        }
+        
+        .btn-sm {
+            padding: 0.5rem 1rem;
+            font-size: 0.85rem;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+        
+        .btn-primary.btn-sm {
+            background: #16a085;
+            color: white;
+        }
+        
+        .btn-primary.btn-sm:hover {
+            background: #138f7a;
+        }
+        
+        .btn-secondary.btn-sm {
+            background: #4a5568;
+            color: white;
+        }
+        
+        .btn-secondary.btn-sm:hover {
+            background: #2d3748;
+        }
+        
+        .btn-outline.btn-sm {
+            background: transparent;
+            color: #4a5568;
+            border: 1px solid #e2e8f0;
+        }
+        
+        .btn-outline.btn-sm:hover {
+            background: #f7fafc;
+            border-color: #cbd5e0;
+            margin-bottom: 1rem;
+        }
+        
+        .athlete-avatar {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-black), var(--secondary-black));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-gold);
+            font-weight: var(--font-weight-bold);
+            font-size: 1.8rem;
+            flex-shrink: 0;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+            border: 3px solid var(--dark-gold);
+            transition: all 0.3s ease;
+        }
+        
+        .athlete-info h3 {
+            margin: 0 0 var(--spacing-xs) 0;
+            font-size: 1.4rem;
+            color: var(--primary-black);
+            font-weight: var(--font-weight-bold);
+        }
+        
+        .athlete-skill {
+            color: var(--primary-black);
+            font-weight: var(--font-weight-semibold);
+            font-size: 1rem;
+            margin-bottom: var(--spacing-xs);
+        }
+        
+        .athlete-team {
+            color: var(--primary-black);
+            font-size: 0.95rem;
+        }
+        
+        /* Athlete Profile Modal Styles */
+        .athlete-profile-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #D4AF37, #B8860B);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 2rem;
+            flex-shrink: 0;
+        }
+        
+        .athlete-profile-header {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .athlete-profile-info h3 {
+            margin: 0 0 0.5rem 0;
+            font-size: 1.5rem;
+            color: #1a202c;
+        }
+        
+        .athlete-profile-bio {
+            color: #4a5568;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+        
+        .athlete-profile-details {
+            display: grid;
+            gap: 1.5rem;
+        }
+        
+        .profile-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+        
+        .profile-tag {
+            background: #D4AF37;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+        
+        /* Messaging Styles */
+        .conversation-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            border-bottom: 1px solid #e2e8f0;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+        
+        .conversation-item:hover {
+            background-color: #f7fafc;
+        }
+        
+        .conversation-item.active {
+            background-color: #D4AF37;
+            color: white;
+        }
+        
+        .conversation-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-gold), var(--secondary-gold));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-black);
+            font-weight: var(--font-weight-bold);
+            flex-shrink: 0;
+            box-shadow: var(--shadow-gold);
+        }
+        
+        .conversation-item.active .conversation-avatar {
+            background: rgba(255,255,255,0.2);
+        }
+        
+        .conversation-info {
+            flex: 1;
+        }
+        
+        .conversation-name {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+        
+        .conversation-last-message {
+            font-size: 0.9rem;
+            color: #4a5568;
+            margin-bottom: 0.25rem;
+        }
+        
+        .conversation-item.active .conversation-last-message {
+            color: rgba(255,255,255,0.8);
+        }
+        
+        .conversation-time {
+            font-size: 0.8rem;
+            color: #718096;
+        }
+        
+        .conversation-item.active .conversation-time {
+            color: rgba(255,255,255,0.6);
+        }
+        
+        .unread-count {
+            background: #e53e3e;
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        
+        .message {
+            margin-bottom: 1rem;
+            max-width: 70%;
+        }
+        
+        .own-message {
+            margin-left: auto;
+            text-align: right;
+        }
+        
+        .other-message {
+            margin-right: auto;
+        }
+        
+        .message-content {
+            background: #f7fafc;
+            padding: 0.75rem 1rem;
+            border-radius: 12px;
+            margin-bottom: 0.25rem;
+            color: #000000; /* Black text */
+        }
+        
+        .own-message .message-content {
+            background: #D4AF37;
+            color: white; /* Keep white text on gold background for contrast */
+        }
+        
+        .message-time {
+            font-size: 0.75rem;
+            color: var(--white); /* White text for timestamps */
+        }
+        
+        .events-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(420px, 1fr));
+            gap: var(--spacing-xl);
+            margin-top: var(--spacing-xl);
+        }
+        
+        .event-card {
+            background: var(--white);
+            border: 2px solid var(--primary-accent);
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-md);
+            transition: all 0.3s ease;
+            color: var(--text-primary);
+        }
+        
+        .event-card:hover {
+            transform: translateY(-6px);
+            border-color: var(--dark-accent);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .event-card::before {
+            display: none;
+        }
+        
+        .event-title {
+            font-size: 1.5rem;
+            font-weight: var(--font-weight-bold);
+            color: var(--primary-black);
+            margin-bottom: var(--spacing-lg);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .event-meta {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: var(--spacing-sm);
+            margin-bottom: var(--spacing-lg);
+            color: var(--primary-black);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+            color: var(--primary-black);
+            font-size: 1rem;
+        }
+        
+        .registration-bar {
+            background: #e2e8f0;
+            height: 8px;
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 1rem 0;
+        }
+        
+        .registration-fill {
+            background: #16a085;
+            height: 100%;
+            transition: width 0.3s ease;
+        }
+        
+        .event-actions {
+            display: flex;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        
+        .btn-action {
+            padding: var(--spacing-sm) var(--spacing-lg);
+            border: none;
+            border-radius: var(--radius-lg);
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: var(--font-weight-semibold);
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .btn-edit { 
+            background: linear-gradient(135deg, #4299e1, #63b3ed); 
+            color: var(--white);
+            box-shadow: 0 4px 15px rgba(66, 153, 225, 0.3);
+        }
+
+        .btn-edit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(66, 153, 225, 0.4);
+        }
+        
+        .btn-view { 
+            background: linear-gradient(135deg, #4169E1, #5B9BD5); 
+            color: var(--white);
+            box-shadow: 0 4px 15px rgba(65, 105, 225, 0.3);
+        }
+
+        .btn-view:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(65, 105, 225, 0.4);
+        }
+        
+        .btn-create {
+            background: linear-gradient(135deg, var(--primary-gold), var(--secondary-gold));
+            color: var(--primary-black);
+            padding: var(--spacing-lg) var(--spacing-xl);
+            border: none;
+            border-radius: var(--radius-lg);
+            cursor: pointer;
+            font-weight: var(--font-weight-bold);
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow-gold);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-create::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.6s;
+        }
+
+        .btn-create:hover::before {
+            left: 100%;
+        }
+        
+        .btn-create:hover {
+            background: linear-gradient(135deg, var(--secondary-gold), var(--light-gold));
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(212, 175, 55, 0.4);
+        }
+        
+        .messages-container {
+            display: flex;
+            height: 600px;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            overflow: hidden;
+            margin-top: 1.5rem;
+        }
+        
+        .conversations-list {
+            width: 300px;
+            border-right: 1px solid #e2e8f0;
+            background: #f8fafc;
+        }
+        
+        .conversation-item {
+            padding: 1rem;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            background: linear-gradient(135deg, 
+                var(--primary-gold) 0%, 
+                var(--secondary-gold) 100%);
+            color: var(--primary-black);
+            margin-bottom: var(--spacing-xs);
+            border-radius: var(--radius-md);
+        }
+        
+        .conversation-item:hover {
+            background: linear-gradient(135deg, 
+                var(--secondary-gold) 0%, 
+                var(--light-gold) 100%);
+        }
+        
+        .conversation-item.active {
+            background: linear-gradient(135deg, 
+                var(--dark-gold) 0%, 
+                var(--primary-gold) 100%);
+            color: var(--primary-black);
+        }
+        
+        .message-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .messages-header {
+            padding: 1rem;
+            border-bottom: 1px solid #e2e8f0;
+            background: #f8fafc;
+        }
+        
+        .messages-content {
+            flex: 1;
+            padding: 1rem;
+            overflow-y: auto;
+            min-height: 400px;
+        }
+        
+        .message-input-area {
+            padding: 1rem;
+            border-top: 1px solid #e2e8f0;
+            background: #f8fafc;
+        }
+        
+        .message-input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            resize: none;
+        }
+        
+        .account-section {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+        
+        .profile-info {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .profile-avatar-section {
+            text-align: center;
+        }
+        
+        .profile-avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-gold), var(--secondary-gold));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-black);
+            font-size: 2rem;
+            font-weight: var(--font-weight-bold);
+            margin: 0 auto 1rem;
+            box-shadow: var(--shadow-gold);
+        }
+        
+        .profile-details {
+            display: grid;
+            gap: 1rem;
+        }
+        
+        .detail-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.75rem;
+            background: #f8fafc;
+            border-radius: 8px;
+            border-left: 4px solid #16a085;
+        }
+        
+        .detail-label {
+            font-weight: 600;
+            color: #1a202c;
+        }
+        
+        .detail-value {
+            color: #4a5568;
+        }
+        
+        .specialties-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+        
+        .specialty-tag {
+            background: #e8f8f5;
+            color: #16a085;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        /* Create Event Modal Styles */
+        .create-event-modal {
+            max-width: 900px;
+            max-height: 90vh;
+            overflow-y: auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+        }
+
+        .create-event-modal .modal-header {
+            background: linear-gradient(135deg, #16a085, #1abc9c);
+            color: white;
+            padding: 2rem;
+            border-radius: 12px 12px 0 0;
+            border-bottom: none;
+        }
+
+        .create-event-modal .modal-header h2 {
+            color: white;
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .create-event-modal .modal-close {
+            color: white;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .create-event-modal .modal-close:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.05);
+        }
+
+        .create-event-modal .modal-body {
+            padding: 2rem;
+        }
+
+        .event-form {
+            padding: 0;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.75rem;
+            font-weight: 600;
+            color: #2d3748;
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 1rem;
+            color: #4a5568;
+            background: white;
+            transition: all 0.2s ease;
+            font-family: inherit;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary-gold);
+            box-shadow: 0 0 0 4px rgba(212, 175, 55, 0.1);
+            transform: translateY(-1px);
+        }
+
+        .form-group input::placeholder,
+        .form-group textarea::placeholder {
+            color: #a0aec0;
+            font-style: italic;
+        }
+
+        .form-section {
+            margin-bottom: 2rem;
+            padding: 2rem;
+            background: linear-gradient(135deg, #f7fafc, #edf2f7);
+            border-radius: 12px;
+            border: 2px solid #e2e8f0;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        .form-section h3 {
+            margin: 0 0 1.5rem 0;
+            color: #2d3748;
+            font-size: 1.2rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .form-section h3::before {
+            content: "⏱️";
+            font-size: 1.2rem;
+        }
+
+        .duration-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        .duration-grid .form-group {
+            margin-bottom: 0;
+        }
+
+        .duration-grid .form-group label {
+            color: var(--primary-gold);
+            font-weight: var(--font-weight-bold);
+            text-align: center;
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .duration-grid input {
+            text-align: center;
+            font-weight: var(--font-weight-semibold);
+            font-size: 1.2rem;
+            color: var(--primary-gold);
+            border-color: var(--primary-gold);
+        }
+
+        .checkbox-container {
+            overflow: visible !important;
+            padding: 0.5rem 0;
+        }
+
+        .checkbox-label {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            color: #2d3748;
+            padding: 1.25rem;
+            background: white;
+            border-radius: 8px;
+            border: 2px solid #e2e8f0;
+            transition: all 0.2s ease;
+            margin: 1rem 0;
+            min-height: 60px;
+        }
+
+        .checkbox-label:hover {
+            border-color: var(--primary-gold);
+            background: rgba(212, 175, 55, 0.1);
+        }
+
+        .checkbox-custom {
+            width: 28px;
+            height: 28px;
+            border: 3px solid #e2e8f0;
+            border-radius: 6px;
+            position: relative;
+            transition: all 0.2s ease;
+            flex-shrink: 0;
+            margin-right: 0.5rem;
+        }
+
+        .checkbox-label input[type="checkbox"] {
+            display: none;
+        }
+
+        .checkbox-label input[type="checkbox"]:checked + .checkbox-custom {
+            background: var(--primary-gold);
+            border-color: var(--primary-gold);
+            transform: scale(1.1);
+        }
+
+        .checkbox-label input[type="checkbox"]:checked + .checkbox-custom::after {
+            content: "✓";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-weight: bold;
+            font-size: 16px;
+            line-height: 1;
+        }
+
+        /* What to Bring Section */
+        .bring-section-container h3::before {
+            content: "🎒";
+        }
+
+        .bring-lists {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        .bring-section {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            border: 2px solid #e2e8f0;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .bring-section h4 {
+            margin: 0 0 1.5rem 0;
+            color: #2d3748;
+            font-size: 1rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .bring-section:first-child h4::before {
+            content: "✅";
+            font-size: 1rem;
+        }
+
+        .bring-section:last-child h4::before {
+            content: "💡";
+            font-size: 1rem;
+        }
+
+        .bring-items {
+            margin-bottom: 1.5rem;
+        }
+
+        .bring-item {
+            display: flex;
+            gap: 0.75rem;
+            margin-bottom: 0.75rem;
+            align-items: center;
+        }
+
+        .bring-input {
+            flex: 1;
+            padding: 0.75rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 6px;
+            font-size: 0.95rem;
+            color: #4a5568;
+            transition: all 0.2s ease;
+        }
+
+        .bring-input:focus {
+            outline: none;
+            border-color: var(--primary-gold);
+            box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.1);
+        }
+
+        .remove-item {
+            background: #f56565;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            width: 36px;
+            height: 36px;
+            cursor: pointer;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+            flex-shrink: 0;
+        }
+
+        .remove-item:hover {
+            background: #e53e3e;
+            transform: scale(1.1);
+        }
+
+        .add-item-btn {
+            background: linear-gradient(135deg, #4299e1, #3182ce);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.95rem;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .add-item-btn:hover {
+            background: linear-gradient(135deg, #3182ce, #2c5aa0);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 2px solid #e2e8f0;
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #718096, #4a5568);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-secondary:hover {
+            background: linear-gradient(135deg, #4a5568, #2d3748);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #16a085, #1abc9c);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            box-shadow: 0 4px 8px rgba(22, 160, 133, 0.2);
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #138d75, #16a085);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(22, 160, 133, 0.3);
+        }
+
+        @media (max-width: 768px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+            
+            .duration-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+            
+            .bring-lists {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+            
+            .create-event-modal {
+                max-width: 95vw;
+                max-height: 95vh;
+                margin: 1rem;
+            }
+
+            .create-event-modal .modal-header {
+                padding: 1.5rem;
+            }
+
+            .create-event-modal .modal-body {
+                padding: 1.5rem;
+            }
+
+            .form-section {
+                padding: 1.5rem;
+            }
+
+            .bring-section {
+                padding: 1rem;
+            }
+
+            .form-actions {
+                flex-direction: column;
+                gap: 0.75rem;
+            }
+
+            .btn-primary,
+            .btn-secondary {
+                width: 100%;
+                padding: 1rem;
+            }
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        .logout-btn {
+            background: #dc2626;
+            color: #ffffff;
+            border: 1px solid #b91c1c;
+            padding: 0.5rem 1rem;
+            margin-left: 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-weight: 400;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            white-space: nowrap;
+        }
+        
+        .logout-btn:hover {
+            background: #b91c1c;
+            border-color: #991b1b;
+            color: #ffffff;
+        }
+
+        /* Blue Message button overrides */
+        .btn-primary.message-btn,
+        .message-btn.btn-primary {
+            background: linear-gradient(135deg, #4169E1, #5B9BD5);
+            color: #ffffff;
+        }
+
+        .btn-primary.message-btn:hover,
+        .message-btn.btn-primary:hover {
+            background: linear-gradient(135deg, #0F4C95, #4169E1);
+        }
+
+        .btn-outline.message-btn,
+        .message-btn.btn-outline {
+            background: #ffffff;
+            color: #4169E1;
+            border: 1px solid #4169E1;
+        }
+
+        .btn-outline.message-btn:hover,
+        .message-btn.btn-outline:hover {
+            background: #4169E1;
+            color: #ffffff;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 2rem;
+            color: #4a5568;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: #4a5568;
+        }
+        
+        .empty-state h3 {
+            margin: 0 0 0.5rem 0;
+            color: #1a202c;
+        }
+        
+        @media (max-width: 768px) {
+            .navbar {
+                height: auto;
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .navbar-brand {
+                border-right: none;
+                border-bottom: 1px solid rgba(255,255,255,0.1);
+                margin: 0;
+                padding: 1rem 1.5rem;
+            }
+            
+            .nav-menu {
+                flex-direction: column;
+                width: 100%;
+            }
+            
+            .nav-item {
+                height: 50px;
+                min-width: auto;
+                justify-content: flex-start;
+                border-bottom: none;
+                border-left: 3px solid transparent;
+            }
+            
+            .nav-item:hover {
+                border-left-color: rgba(212, 175, 55, 0.5);
+                border-bottom-color: transparent;
+            }
+            
+            .nav-item.active {
+                border-left-color: #D4AF37;
+                border-bottom-color: transparent;
+            }
+            
+            .user-info {
+                margin: 0;
+                padding: 1rem 1.5rem;
+                text-align: left;
+                border-top: 1px solid rgba(255,255,255,0.1);
+            }
+            
+            .logout-btn {
+                margin: 1rem 1.5rem;
+                justify-content: flex-start;
+            }
+            
+            .main-content {
+                margin-top: 0;
+            }
+            
+            .athletes-grid, .events-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .messages-container {
+                flex-direction: column;
+                height: auto;
+            }
+            
+            .conversations-list {
+                width: 100%;
+                max-height: 200px;
+                overflow-y: auto;
+            }
+            
+            .profile-info {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Blue outlined event cards */
+        .event-card {
+            background: var(--white);
+            border: 2px solid var(--primary-accent);
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-md);
+            transition: all 0.3s ease;
+            color: var(--text-primary);
+        }
+
+        .event-card:hover {
+            transform: translateY(-6px);
+            border-color: var(--dark-accent);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .event-card::before {
+            display: none;
+        }
+
+        /* Messaging color updates */
+        .own-message .message-content {
+            background: linear-gradient(135deg, var(--primary-accent), var(--secondary-accent));
+            color: var(--white);
+        }
+
+        .other-message .message-content {
+            background: #f0f4ff;
+            color: var(--text-primary);
+        }
+
+        .conversation-item.active {
+            background-color: var(--primary-accent);
+            color: var(--white);
+        }
+
+        .conversation-item.active .conversation-last-message,
+        .conversation-item.active .conversation-time {
+            color: var(--white);
+        }
+
+        .conversation-avatar {
+            background: linear-gradient(135deg, var(--primary-accent), var(--secondary-accent));
+            color: var(--white);
+        }
+
+        /* Delete button styling */
+        .btn-delete {
+            background: linear-gradient(135deg, #dc2626, #ef4444);
+            color: #ffffff;
+            box-shadow: 0 4px 15px rgba(220, 38, 38, 0.3);
+            border: none;
+        }
+        .btn-delete:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(220, 38, 38, 0.4);
+        }
+
+        /* Recent Activities Styling */
+        .recent-activities {
+            padding: var(--spacing-lg);
+        }
+
+        .recent-activities h4 {
+            font-size: 1.5rem;
+            font-weight: var(--font-weight-semibold);
+            color: var(--text-primary);
+            margin-bottom: var(--spacing-lg);
+            padding-bottom: var(--spacing-sm);
+            border-bottom: 2px solid var(--primary-accent);
+            display: inline-block;
+        }
+
+        .activity-list {
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-md);
+            margin-bottom: var(--spacing-xl);
+        }
+
+        .activity-item {
+            background: linear-gradient(135deg, var(--primary-accent), var(--secondary-accent));
+            color: var(--white);
+            padding: var(--spacing-md);
+            border-radius: var(--radius-lg);
+            font-weight: var(--font-weight-medium);
+            box-shadow: var(--shadow-md);
+            transition: transform 0.3s ease;
+        }
+
+        .activity-item:hover {
+            transform: translateX(8px);
+        }
+
+        .activity-cta {
+            background: var(--gray-100);
+            border: 2px solid var(--primary-accent);
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-lg);
+            text-align: center;
+        }
+
+        .activity-cta p {
+            color: var(--text-primary);
+            font-weight: var(--font-weight-medium);
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Top Navigation -->
+        <nav class="navbar">
+            <div class="navbar-brand">
+                <h2>Cheer Network</h2>
+            </div>
+            
+            <div class="nav-menu">
+                <div class="nav-item active" data-section="overview">
+                    <span>Dashboard</span>
+                </div>
+                <div class="nav-item" data-section="athletes">
+                    <span>My Athletes</span>
+                </div>
+                <div class="nav-item" data-section="events">
+                    <span>My Events</span>
+                </div>
+                <div class="nav-item" data-section="messages">
+                    <span>Messages</span>
+                </div>
+                <div class="nav-item" data-section="account">
+                    <span>Account Settings</span>
+                </div>
+            </div>
+            
+            <div class="user-info">
+                <h3 id="user-name">Loading...</h3>
+                <div class="user-role">Clinician</div>
+            </div>
+            
+            <button class="logout-btn" id="logout-btn">
+                <span>Logout</span>
+            </button>
+        </nav>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="dashboard-header">
+                <h1 class="dashboard-title">Clinician Dashboard</h1>
+                <button class="btn-create" id="create-event-btn">
+                    ➕ Create Event
+                </button>
+            </div>
+
+            <!-- Overview Section -->
+            <div id="overview-section" class="dashboard-section">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-number" id="stat-events">0</div>
+                        <div class="stat-label">Total Events Created</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="stat-athletes">0</div>
+                        <div class="stat-label">Total Athletes Trained</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="stat-followers">0</div>
+                        <div class="stat-label">Active Followers</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="stat-earnings">$0</div>
+                        <div class="stat-label">Total Earnings</div>
+                    </div>
+                </div>
+
+                <div class="section-content">
+                    <h2 class="section-title">🎯 Recent Activity</h2>
+                    <div id="overview-content">
+                        <div class="empty-state">
+                            <h3>Welcome to Your Dashboard!</h3>
+                            <p>Start by creating your first training event or connecting with athletes.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Athletes Section -->
+            <div id="athletes-section" class="dashboard-section hidden">
+                <div class="section-content">
+                    <h2 class="section-title">👥 My Athletes</h2>
+                    <div id="athletes-loading" class="loading">Loading athletes...</div>
+                    <div id="athletes-grid" class="athletes-grid hidden"></div>
+                    <div id="athletes-empty" class="empty-state hidden">
+                        <h3>No athletes yet</h3>
+                        <p>Athletes will appear here when they connect with you!</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Events Section -->
+            <div id="events-section" class="dashboard-section hidden">
+                <div class="section-content">
+                    <h2 class="section-title">📅 My Events</h2>
+                    <div id="events-loading" class="loading">Loading events...</div>
+                    <div id="events-grid" class="events-grid hidden"></div>
+                    <div id="events-empty" class="empty-state hidden">
+                        <h3>No events created yet</h3>
+                        <p>Click "Create Event" to start hosting training sessions!</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Messages Section -->
+            <div id="messages-section" class="dashboard-section hidden">
+                <div class="section-content">
+                    <h2 class="section-title">💬 Messages</h2>
+                    <div id="messages-container" class="messages-container">
+                        <div class="conversations-list">
+                            <div id="conversations-loading" class="loading">Loading conversations...</div>
+                            <div id="conversations-list"></div>
+                        </div>
+                        <div class="message-area">
+                            <div class="messages-header">
+                                <h3 id="current-conversation">Select a conversation</h3>
+                            </div>
+                            <div class="messages-content" id="messages-content">
+                                <div class="empty-state">
+                                    <h3>Select a conversation</h3>
+                                    <p>Choose an athlete to start messaging</p>
+                                </div>
+                            </div>
+                            <div class="message-input-area hidden" id="message-input-area">
+                                <textarea class="message-input" id="message-input" placeholder="Type your message..." rows="3"></textarea>
+                                <button class="btn-action btn-view" id="send-message-btn">Send Message</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Account Settings Section -->
+            <div id="account-section" class="dashboard-section hidden">
+                <div class="section-content">
+                    <h2 class="section-title">⚙️ Account Settings</h2>
+                    <div id="account-loading" class="loading">Loading account details...</div>
+                    <div id="account-content" class="hidden">
+                        <div class="profile-info">
+                            <div class="profile-avatar-section">
+                                <div class="profile-avatar" id="profile-avatar">
+                                    CN
+                                </div>
+                                <h3 id="profile-name">Loading...</h3>
+                                <p id="profile-email">Loading...</p>
+                            </div>
+                            <div class="profile-details">
+                                <div class="detail-item">
+                                    <span class="detail-label">Role:</span>
+                                    <span class="detail-value" id="detail-role">Clinician</span>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">Member Since:</span>
+                                    <span class="detail-value" id="detail-joined">Loading...</span>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">Specialties:</span>
+                                    <div class="detail-value">
+                                        <div class="specialties-list" id="detail-specialties">
+                                            <span class="specialty-tag">Loading...</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">Experience:</span>
+                                    <span class="detail-value" id="detail-experience">Loading...</span>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">Verified:</span>
+                                    <span class="detail-value" id="detail-verified">Loading...</span>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">Bio:</span>
+                                    <span class="detail-value" id="detail-bio">Loading...</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Athlete Profile Modal -->
+    <div id="athleteProfileModal" class="modal" style="display: none;">
+        <div class="modal-overlay"></div>
+        <div class="modal-content athlete-profile-modal">
+            <div class="modal-header">
+                <h2>Athlete Profile</h2>
+                <button class="modal-close" id="athleteProfileCloseBtn" title="Close">×</button>
+            </div>
+            <div class="modal-body" id="athleteProfileContent">
+                <div class="loading">Loading profile...</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Create Event Modal -->
+    <div id="createEventModal" class="modal" style="display: none;">
+        <div class="modal-overlay"></div>
+        <div class="modal-content create-event-modal">
+            <div class="modal-header">
+                <h2>Create New Event</h2>
+                <button class="modal-close" id="createEventCloseBtn" title="Close">×</button>
+            </div>
+            <div class="modal-body" id="createEventContent">
+                <form id="createEventForm" class="event-form">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="eventTitle">Event Title *</label>
+                            <input type="text" id="eventTitle" name="eventTitle" required placeholder="Enter event title">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="eventLocation">Location *</label>
+                            <input type="text" id="eventLocation" name="eventLocation" required placeholder="Enter event location">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="eventPrice">Price per Athlete *</label>
+                            <input type="number" id="eventPrice" name="eventPrice" required min="0" step="0.01" placeholder="0.00">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="maxAthletes">Maximum Athletes *</label>
+                            <input type="number" id="maxAthletes" name="maxAthletes" required min="1" max="100" value="30" placeholder="30">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="eventDate">Date *</label>
+                            <input type="date" id="eventDate" name="eventDate" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="eventDescription">Event Description *</label>
+                        <textarea id="eventDescription" name="eventDescription" required rows="4" placeholder="Describe what the event will cover, skill levels, and what participants can expect..."></textarea>
+                    </div>
+                    
+                    <div class="form-section">
+                        <h3>Event Duration</h3>
+                        <div class="duration-grid">
+                            <div class="form-group">
+                                <label for="eventDays">Days</label>
+                                <input type="number" id="eventDays" name="eventDays" min="0" max="30" value="1">
+                            </div>
+                            <div class="form-group">
+                                <label for="eventHours">Hours</label>
+                                <input type="number" id="eventHours" name="eventHours" min="0" max="23" value="2">
+                            </div>
+                            <div class="form-group">
+                                <label for="eventMinutes">Minutes</label>
+                                <input type="number" id="eventMinutes" name="eventMinutes" min="0" max="59" value="0">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group checkbox-container">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="overnightCamp" name="overnightCamp">
+                            <span class="checkbox-custom"></span>
+                            This is an overnight camp
+                        </label>
+                    </div>
+                    
+                    <div class="form-section bring-section-container">
+                        <h3>What to Bring</h3>
+                        <div class="bring-lists">
+                            <div class="bring-section">
+                                <h4>Required Items</h4>
+                                <div class="bring-items" id="requiredItems">
+                                    <div class="bring-item">
+                                        <input type="text" placeholder="Enter required item" class="bring-input">
+                                        <button type="button" class="remove-item">×</button>
+                                    </div>
+                                </div>
+                                <button type="button" class="add-item-btn" data-target="requiredItems">+ Add Required Item</button>
+                            </div>
+                            
+                            <div class="bring-section">
+                                <h4>Recommended Items</h4>
+                                <div class="bring-items" id="recommendedItems">
+                                    <div class="bring-item">
+                                        <input type="text" placeholder="Enter recommended item" class="bring-input">
+                                        <button type="button" class="remove-item">×</button>
+                                    </div>
+                                </div>
+                                <button type="button" class="add-item-btn" data-target="recommendedItems">+ Add Recommended Item</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="button" class="btn-secondary" id="cancelEventBtn">Cancel</button>
+                        <button type="submit" class="btn-primary">Create Event</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global state
+        let currentUser = null;
+        let authToken = localStorage.getItem('authToken');
+        let athletes = [];
+        let events = [];
+        let currentConversation = null;
+        // Track when editing an event (null = creating)
+        let editingEventId = null;
+
+        // Navigation
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', () => {
+                const section = item.dataset.section;
+                switchSection(section);
+                
+                // Update active nav item
+                document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
+                item.classList.add('active');
+            });
+        });
+
+        function switchSection(sectionName) {
+            // Hide all sections
+            document.querySelectorAll('.dashboard-section').forEach(section => {
+                section.classList.add('hidden');
+            });
+            
+            // Show selected section
+            const targetSection = document.getElementById(`${sectionName}-section`);
+            if (targetSection) {
+                targetSection.classList.remove('hidden');
+            }
+
+            // Show/hide create event button based on section
+            const createEventBtn = document.getElementById('create-event-btn');
+            if (createEventBtn) {
+                if (sectionName === 'overview' || sectionName === 'events') {
+                    createEventBtn.style.display = 'block';
+                } else {
+                    createEventBtn.style.display = 'none';
+                }
+            }
+
+            // Load section data
+            switch(sectionName) {
+                case 'overview':
+                    loadOverview();
+                    break;
+                case 'athletes':
+                    loadAthletes();
+                    break;
+                case 'events':
+                    loadEvents();
+                    break;
+                case 'messages':
+                    loadMessages();
+                    break;
+                case 'account':
+                    loadAccountSettings();
+                    break;
+            }
+        }
+
+        // Check authentication and load user data
+        async function checkAuth() {
+            if (!authToken) {
+                console.log('No auth token, redirecting to login');
+                window.location.href = '/';
+                return;
+            }
+
+            // Prevent infinite redirect loops
+            const lastRedirect = sessionStorage.getItem('lastRedirect');
+            const now = Date.now();
+            if (lastRedirect && (now - parseInt(lastRedirect)) < 5000) {
+                console.error('Preventing infinite redirect loop');
+                localStorage.removeItem('authToken');
+                sessionStorage.removeItem('lastRedirect');
+                window.location.href = '/';
+                return;
+            }
+
+            try {
+                console.log('Fetching user profile...');
+                const response = await fetch('/api/users/profile', {
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (response.ok) {
+                    const userData = await response.json();
+                    console.log('User data received:', { role: userData.role, name: userData.first_name });
+                    
+                    if (userData.role !== 'clinician') {
+                        console.log('User is not a clinician, redirecting...');
+                        sessionStorage.setItem('lastRedirect', now.toString());
+                        window.location.href = '/athlete-dashboard.html';
+                        return;
+                    }
+                    
+                    currentUser = userData;
+                    document.getElementById('user-name').textContent = `${userData.first_name} ${userData.last_name}`;
+                    
+                    // Load initial data
+                    loadOverview();
+                } else {
+                    console.error('Failed to fetch user profile');
+                    localStorage.removeItem('authToken');
+                    window.location.href = '/';
+                }
+            } catch (error) {
+                console.error('Auth check error:', error);
+                localStorage.removeItem('authToken');
+                window.location.href = '/';
+            }
+        }
+
+        // Load overview data
+        async function loadOverview() {
+            console.log('Loading overview...');
+            
+            try {
+                // Get user profile with stats
+                const response = await fetch('/api/users/profile', {
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (response.ok) {
+                    const userData = await response.json();
+                    console.log('Overview data received:', userData);
+                    console.log('Stats data:', userData.stats);
+                    updateDashboardStats(userData.stats);
+                    updateRecentActivity(userData);
+                } else {
+                    console.error('Failed to load overview data');
+                }
+            } catch (error) {
+                console.error('Overview loading error:', error);
+            }
+        }
+
+        function updateDashboardStats(stats) {
+            console.log('Updating dashboard stats with:', stats);
+            
+            // Update stat cards
+            const eventsCount = stats.eventsCreatedCount || 0;
+            const athletesCount = stats.athletesTrainedCount || 0;
+            const followersCount = stats.followersCount || 0;
+            const earnings = stats.totalEarnings || 0;
+            
+            document.getElementById('stat-events').textContent = eventsCount;
+            document.getElementById('stat-athletes').textContent = athletesCount;
+            document.getElementById('stat-followers').textContent = followersCount;
+            document.getElementById('stat-earnings').textContent = `$${earnings.toFixed(2)}`;
+            
+            console.log('Dashboard stats updated:', {
+                events: eventsCount,
+                athletes: athletesCount,
+                followers: followersCount,
+                earnings: earnings
+            });
+        }
+
+        function updateRecentActivity(userData) {
+            const overviewContent = document.getElementById('overview-content');
+            
+            if (!userData.stats || 
+                (userData.stats.eventsCreatedCount === 0 && 
+                 userData.stats.athletesTrainedCount === 0 && 
+                 userData.stats.followersCount === 0)) {
+                // Show welcome message for new users
+                overviewContent.innerHTML = `
+                    <div class="empty-state">
+                        <h3>Welcome to Your Dashboard!</h3>
+                        <p>Start by creating your first training event or connecting with athletes.</p>
+                    </div>
+                `;
+            } else {
+                // Show recent activity for active users
+                const activities = [];
+                
+                if (userData.stats.eventsCreatedCount > 0) {
+                    activities.push(`📅 Created ${userData.stats.eventsCreatedCount} training event${userData.stats.eventsCreatedCount > 1 ? 's' : ''}`);
+                }
+                
+                if (userData.stats.athletesTrainedCount > 0) {
+                    activities.push(`👥 Trained ${userData.stats.athletesTrainedCount} athlete${userData.stats.athletesTrainedCount > 1 ? 's' : ''}`);
+                }
+                
+                if (userData.stats.followersCount > 0) {
+                    activities.push(`🌟 Gained ${userData.stats.followersCount} follower${userData.stats.followersCount > 1 ? 's' : ''}`);
+                }
+                
+                if (userData.stats.totalEarnings > 0) {
+                    activities.push(`💰 Earned $${userData.stats.totalEarnings.toFixed(2)}`);
+                }
+                
+                overviewContent.innerHTML = `
+                    <div class="recent-activities">
+                        <h4>Your Achievements</h4>
+                        <div class="activity-list">
+                            ${activities.map(activity => `<div class="activity-item">${activity}</div>`).join('')}
+                        </div>
+                        <div class="activity-cta">
+                            <p>Keep up the great work! Create more events to grow your network.</p>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+
+        // Load athletes
+        async function loadAthletes() {
+            console.log('Loading athletes...');
+            const loadingEl = document.getElementById('athletes-loading');
+            const gridEl = document.getElementById('athletes-grid');
+            const emptyEl = document.getElementById('athletes-empty');
+            
+            if (!loadingEl || !gridEl || !emptyEl) return;
+            
+            loadingEl.classList.remove('hidden');
+            gridEl.classList.add('hidden');
+            emptyEl.classList.add('hidden');
+
+            try {
+                // Load pending follow requests
+                const pendingResponse = await fetch('/api/follows/pending', {
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                // Load accepted followers
+                const followersResponse = await fetch('/api/follows/followers', {
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (pendingResponse.ok && followersResponse.ok) {
+                    const pendingData = await pendingResponse.json();
+                    const followersData = await followersResponse.json();
+                    
+                    const pendingRequests = pendingData.pendingRequests || [];
+                    const followers = followersData.followers || [];
+                    
+                    console.log('Pending requests:', pendingRequests.length);
+                    console.log('Accepted followers:', followers.length);
+                    
+                    if (pendingRequests.length === 0 && followers.length === 0) {
+                        loadingEl.classList.add('hidden');
+                        emptyEl.classList.remove('hidden');
+                    } else {
+                        displayAthletes(pendingRequests, followers);
+                        loadingEl.classList.add('hidden');
+                        gridEl.classList.remove('hidden');
+                    }
+                } else {
+                    throw new Error('Failed to load athlete data');
+                }
+            } catch (error) {
+                console.error('Failed to load athletes:', error);
+                loadingEl.classList.add('hidden');
+                emptyEl.classList.remove('hidden');
+            }
+        }
+
+        // Display athletes (pending and accepted)
+        function displayAthletes(pendingRequests, followers) {
+            const gridEl = document.getElementById('athletes-grid');
+            gridEl.innerHTML = '';
+
+            // Display pending requests first
+            pendingRequests.forEach(request => {
+                const athlete = request.athlete_profiles;
+                const user = athlete.users;
+                const card = createAthleteCard(user, athlete, 'pending', request.follow_id, request.requested_at);
+                gridEl.appendChild(card);
+            });
+
+            // Display accepted followers
+            followers.forEach(follower => {
+                const athlete = follower.athlete_profiles;
+                const user = athlete.users;
+                const card = createAthleteCard(user, athlete, 'accepted', follower.follow_id, follower.responded_at);
+                gridEl.appendChild(card);
+            });
+        }
+
+        // Create athlete card element
+        function createAthleteCard(user, athlete, status, followId, date) {
+            const card = document.createElement('div');
+            card.className = 'athlete-card';
+            
+            const avatarContent = user.profile_image_url 
+                ? `<img src="${user.profile_image_url}" alt="${user.first_name}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">` 
+                : `${user.first_name[0]}${user.last_name[0]}`;
+            
+            const statusBadge = status === 'pending' 
+                ? '<span class="status-badge pending">Pending Request</span>'
+                : '<span class="status-badge accepted">Connected</span>';
+            
+            const actionButtons = status === 'pending'
+                ? `
+                    <button class="btn-primary btn-sm accept-btn" data-follow-id="${followId}">Accept</button>
+                    <button class="btn-secondary btn-sm decline-btn" data-follow-id="${followId}">Decline</button>
+                    <button class="btn-outline btn-sm view-profile-btn" data-athlete-id="${athlete.athlete_id}">View Profile</button>
+                    <button class="btn-outline btn-sm message-btn" data-athlete-id="${athlete.athlete_id}" data-athlete-name="${user.first_name} ${user.last_name}">Message</button>
+                `
+                : `
+                    <button class="btn-secondary btn-sm view-profile-btn" data-athlete-id="${athlete.athlete_id}">View Profile</button>
+                    <button class="btn-primary btn-sm message-btn" data-athlete-id="${athlete.athlete_id}" data-athlete-name="${user.first_name} ${user.last_name}">Message</button>
+                    <button class="btn-outline btn-sm remove-follower-btn" data-athlete-id="${athlete.athlete_id}">Remove</button>
+                `;
+
+            card.innerHTML = `
+                <div class="athlete-header">
+                    <div class="athlete-avatar">${avatarContent}</div>
+                    <div class="athlete-info">
+                        <h3>${user.first_name} ${user.last_name}</h3>
+                        ${statusBadge}
+                        <div class="athlete-details">
+                            <span>Skill Level: ${athlete.skill_level || 'Not specified'}</span>
+                            ${athlete.age ? `<span>Age: ${athlete.age}</span>` : ''}
+                            ${athlete.team_affiliation ? `<span>Team: ${athlete.team_affiliation}</span>` : ''}
+                        </div>
+                    </div>
+                </div>
+                ${user.bio ? `<div class="athlete-bio">${user.bio}</div>` : ''}
+                <div class="athlete-actions">
+                    ${actionButtons}
+                </div>
+                <div class="athlete-date">
+                    ${status === 'pending' ? 'Requested' : 'Connected'}: ${new Date(date).toLocaleDateString()}
+                </div>
+            `;
+
+            // Add event listeners to buttons
+            const acceptBtn = card.querySelector('.accept-btn');
+            const declineBtn = card.querySelector('.decline-btn');
+            const viewProfileBtn = card.querySelector('.view-profile-btn');
+            const messageBtn = card.querySelector('.message-btn');
+            const removeFollowerBtn = card.querySelector('.remove-follower-btn');
+
+            if (acceptBtn) {
+                acceptBtn.addEventListener('click', function() {
+                    const followId = this.dataset.followId;
+                    respondToRequest(followId, 'accept');
+                });
+            }
+
+            if (declineBtn) {
+                declineBtn.addEventListener('click', function() {
+                    const followId = this.dataset.followId;
+                    respondToRequest(followId, 'reject');
+                });
+            }
+
+            if (viewProfileBtn) {
+                viewProfileBtn.addEventListener('click', function() {
+                    const athleteId = this.dataset.athleteId;
+                    viewAthleteProfile(athleteId);
+                });
+            }
+
+            if (messageBtn) {
+                messageBtn.addEventListener('click', function() {
+                    const athleteId = this.dataset.athleteId;
+                    const athleteName = this.dataset.athleteName;
+                    startConversationWithAthlete(athleteId, athleteName);
+                });
+            }
+
+            if (removeFollowerBtn) {
+                removeFollowerBtn.addEventListener('click', function() {
+                    const athleteId = this.dataset.athleteId;
+                    removeFollower(athleteId);
+                });
+            }
+
+            return card;
+        }
+
+        // Respond to follow request
+        async function respondToRequest(followId, action) {
+            try {
+                const response = await fetch(`/api/follows/request/${followId}/respond`, {
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ action })
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    console.log(`Request ${action}ed:`, data.message);
+                    
+                    // Show success message
+                    showMessage(`Request ${action}ed successfully!`, 'success');
+                    
+                    // Reload athletes to update the display
+                    loadAthletes();
+                } else {
+                    const errorData = await response.json();
+                    showMessage(errorData.error || `Failed to ${action} request`, 'error');
+                }
+            } catch (error) {
+                console.error(`Error ${action}ing request:`, error);
+                showMessage(`Error ${action}ing request. Please try again.`, 'error');
+            }
+        }
+
+        // View athlete profile
+        async function viewAthleteProfile(athleteId) {
+            const modal = document.getElementById('athleteProfileModal');
+            const content = document.getElementById('athleteProfileContent');
+            
+            // Show modal
+            modal.style.display = 'flex';
+            content.innerHTML = '<div class="loading">Loading profile...</div>';
+            
+            try {
+                const response = await fetch(`/api/users/athletes/${athleteId}`, {
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    displayAthleteProfile(data.athlete);
+                } else {
+                    content.innerHTML = '<div class="empty-state"><h3>Error loading profile</h3><p>Please try again later</p></div>';
+                }
+            } catch (error) {
+                console.error('Error loading athlete profile:', error);
+                content.innerHTML = '<div class="empty-state"><h3>Error loading profile</h3><p>Please check your connection</p></div>';
+            }
+        }
+
+        // Display athlete profile in modal
+        function displayAthleteProfile(athlete) {
+            const content = document.getElementById('athleteProfileContent');
+            const user = athlete.users || {};
+            const initials = `${user.first_name?.[0] || ''}${user.last_name?.[0] || ''}`.toUpperCase();
+            
+            // Create avatar HTML with profile image support
+            let avatarHTML;
+            if (user.profile_image_url) {
+                avatarHTML = `<div class="athlete-profile-avatar" style="background-image: url('${user.profile_image_url}'); background-size: cover; background-position: center;"></div>`;
+            } else {
+                avatarHTML = `<div class="athlete-profile-avatar">${initials}</div>`;
+            }
+            
+            content.innerHTML = `
+                <div class="athlete-profile-header">
+                    ${avatarHTML}
+                    <div class="athlete-profile-info">
+                        <h3>${user.first_name} ${user.last_name}</h3>
+                        <div class="athlete-profile-bio">${user.bio || 'No bio provided'}</div>
+                    </div>
+                </div>
+                
+                <div class="athlete-profile-details">
+                    <div class="detail-section">
+                        <h4>📊 Athlete Information</h4>
+                        <div class="detail-grid">
+                            <div class="detail-item">
+                                <span class="detail-label">Skill Level</span>
+                                <span class="detail-value">${athlete.skill_level || 'Not specified'}</span>
+                            </div>
+                            ${athlete.age ? `
+                            <div class="detail-item">
+                                <span class="detail-label">Age</span>
+                                <span class="detail-value">${athlete.age} years old</span>
+                            </div>
+                            ` : ''}
+                            ${athlete.team_affiliation ? `
+                            <div class="detail-item">
+                                <span class="detail-label">Team Affiliation</span>
+                                <span class="detail-value">${athlete.team_affiliation}</span>
+                            </div>
+                            ` : ''}
+                            ${athlete.years_experience ? `
+                            <div class="detail-item">
+                                <span class="detail-label">Years of Experience</span>
+                                <span class="detail-value">${athlete.years_experience} years</span>
+                            </div>
+                            ` : ''}
+                        </div>
+                    </div>
+                    
+                    ${athlete.location ? `
+                    <div class="detail-section">
+                        <h4>📍 Location</h4>
+                        <p>${athlete.location}</p>
+                    </div>
+                    ` : ''}
+                    
+                    ${athlete.goals ? `
+                    <div class="detail-section">
+                        <h4>🎯 Goals</h4>
+                        <p>${athlete.goals}</p>
+                    </div>
+                    ` : ''}
+                    
+                    ${athlete.achievements && athlete.achievements.length > 0 ? `
+                    <div class="detail-section">
+                        <h4>🏆 Achievements</h4>
+                        <div class="profile-tags">
+                            ${athlete.achievements.map(achievement => 
+                                `<span class="profile-tag">${achievement}</span>`
+                            ).join('')}
+                        </div>
+                    </div>
+                    ` : ''}
+                </div>
+                
+                <div class="athlete-actions" style="margin-top: 2rem; padding-top: 1rem; border-top: 1px solid #e2e8f0;">
+                    <button class="btn-primary btn-modal-message" data-athlete-id="${athlete.athlete_id}" data-first-name="${user.first_name}">
+                        Message ${user.first_name}
+                    </button>
+                    <button class="btn-secondary btn-modal-close" style="background: #6b7280;">
+                        Close
+                    </button>
+                </div>
+            `;
+            
+            // Add event listeners for modal buttons
+            const modalMessageBtn = content.querySelector('.btn-modal-message');
+            const modalCloseBtn = content.querySelector('.btn-modal-close');
+            
+            if (modalMessageBtn) {
+                modalMessageBtn.addEventListener('click', () => {
+                    const athleteId = modalMessageBtn.getAttribute('data-athlete-id');
+                    const firstName = modalMessageBtn.getAttribute('data-first-name');
+                    closeAthleteProfile();
+                    startConversationWithAthlete(athleteId, firstName);
+                });
+            }
+            
+            modalCloseBtn.addEventListener('click', () => {
+                closeAthleteProfile();
+            });
+        }
+
+        // Close athlete profile modal
+        function closeAthleteProfile() {
+            const modal = document.getElementById('athleteProfileModal');
+            if (modal) {
+                modal.style.display = 'none';
+                // Clear the content when closing
+                const content = document.getElementById('athleteProfileContent');
+                if (content) {
+                    content.innerHTML = '<div class="loading">Loading profile...</div>';
+                }
+            }
+        }
+
+        // Start conversation with athlete
+        function startConversationWithAthlete(athleteId, athleteName) {
+            // Switch to messages section
+            switchSection('messages');
+            
+            // Update active nav item
+            document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
+            document.querySelector('.nav-item[data-section="messages"]').classList.add('active');
+            
+            // Set up the conversation
+            setTimeout(() => {
+                selectConversation(athleteId, athleteName);
+                showMessage(`Started conversation with ${athleteName}`, 'success');
+            }, 100);
+        }
+
+        // Remove follower
+        async function removeFollower(athleteId) {
+            if (!confirm('Are you sure you want to remove this athlete from your followers?')) {
+                return;
+            }
+
+            try {
+                const response = await fetch(`/api/follows/remove-follower/${athleteId}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (response.ok) {
+                    showMessage('Follower removed successfully!', 'success');
+                    loadAthletes(); // Reload to update display
+                } else {
+                    const errorData = await response.json();
+                    showMessage(errorData.error || 'Failed to remove follower', 'error');
+                }
+            } catch (error) {
+                console.error('Error removing follower:', error);
+                showMessage('Error removing follower. Please try again.', 'error');
+            }
+        }
+
+        // Show message function
+        function showMessage(message, type = 'info') {
+            // Create a simple toast notification
+            const toast = document.createElement('div');
+            toast.className = `toast toast-${type}`;
+            toast.textContent = message;
+            toast.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                padding: 12px 20px;
+                border-radius: 6px;
+                color: white;
+                font-weight: 500;
+                z-index: 10000;
+                max-width: 300px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+                background: ${type === 'success' ? '#D4AF37' : type === 'error' ? '#e74c3c' : '#D4AF37'};
+            `;
+            
+            document.body.appendChild(toast);
+            
+            // Remove after 3 seconds
+            setTimeout(() => {
+                toast.remove();
+            }, 3000);
+        }
+
+        // Load events
+        async function loadEvents() {
+            console.log('Loading events...');
+            const loadingEl = document.getElementById('events-loading');
+            const gridEl = document.getElementById('events-grid');
+            const emptyEl = document.getElementById('events-empty');
+            
+            if (!loadingEl || !gridEl || !emptyEl) return;
+            
+            loadingEl.classList.remove('hidden');
+            gridEl.classList.add('hidden');
+            emptyEl.classList.add('hidden');
+
+            try {
+                // Fetch clinician's events from API
+                const url = `/api/events?clinicianId=${currentUser.user_id}`;
+                console.log('Fetching events from URL:', url);
+                console.log('Current user:', currentUser);
+                
+                const response = await fetch(url, {
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    const events = data.events || data; // Handle both response formats
+                    console.log('Loaded events:', events);
+                    
+                    loadingEl.classList.add('hidden');
+                    
+                    if (events.length === 0) {
+                    emptyEl.classList.remove('hidden');
+                    } else {
+                        displayEvents(events);
+                        gridEl.classList.remove('hidden');
+                    }
+                } else {
+                    const errorText = await response.text();
+                    console.error('Failed to load events:', response.status, errorText);
+                    loadingEl.classList.add('hidden');
+                    emptyEl.classList.remove('hidden');
+                }
+            } catch (error) {
+                console.error('Failed to load events:', error);
+                loadingEl.classList.add('hidden');
+                emptyEl.classList.remove('hidden');
+            }
+        }
+
+        // Display events in the grid
+        function displayEvents(events) {
+            const gridEl = document.getElementById('events-grid');
+            
+            if (!gridEl) return;
+            
+            gridEl.innerHTML = events.map(event => {
+                const startDate = new Date(event.start_date);
+                const endDate = event.end_date ? new Date(event.end_date) : null;
+                
+                const formattedDate = startDate.toLocaleDateString('en-US', { 
+                    weekday: 'long', 
+                    year: 'numeric', 
+                    month: 'long', 
+                    day: 'numeric'
+                });
+                
+                const formattedTime = startDate.toLocaleTimeString('en-US', {
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+                
+                const duration = endDate ? 
+                    `${Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24))} days` : 
+                    'Duration not set';
+                
+                return `
+                    <div class="event-card">
+                        <div class="event-header">
+                            <h3 class="event-title">${event.title}</h3>
+                            <span class="event-price">$${event.price || 0}</span>
+                        </div>
+                        <div class="event-details">
+                            <div class="event-meta">
+                                📅 ${formattedDate}<br>
+                                ⏰ ${formattedTime}<br>
+                                ⏱️ ${duration}<br>
+                                📍 ${event.location || 'Location TBD'}<br>
+                                👥 Max Athletes: ${event.max_athletes || 'Unlimited'}
+                            </div>
+                            <p class="event-description">${event.description || 'No description provided.'}</p>
+                            ${event.requirements ? `<div class="event-requirements"><strong>Requirements:</strong> ${event.requirements}</div>` : ''}
+                        </div>
+                        <div class="event-actions">
+                            <button class="btn-edit" data-event-id="${event.event_id}">Edit</button>
+                            <button class="btn-delete" data-event-id="${event.event_id}">Delete</button>
+                            <span class="event-status ${event.is_private ? 'private' : 'public'}">${event.is_private ? 'Private' : 'Public'}</span>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            // Attach button listeners without inline handlers (CSP safe)
+            gridEl.querySelectorAll('.btn-edit').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const id = btn.getAttribute('data-event-id');
+                    if (id) editEvent(id);
+                });
+            });
+
+            gridEl.querySelectorAll('.btn-delete').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const id = btn.getAttribute('data-event-id');
+                    if (id) deleteEvent(id);
+                });
+            });
+        }
+
+        // Load messages
+        async function loadMessages() {
+            console.log('Loading messages...');
+            
+            try {
+                const response = await fetch('/api/messages/conversations', {
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                console.log('Messages API response status:', response.status);
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    console.log('Messages API response data:', data);
+                    console.log('Conversations found:', data.conversations?.length || 0);
+                    displayConversations(data.conversations || []);
+                } else {
+                    const errorData = await response.text();
+                    console.error('Failed to load conversations:', response.status, errorData);
+                    displayConversations([]);
+                }
+            } catch (error) {
+                console.error('Error loading conversations:', error);
+                displayConversations([]);
+            }
+        }
+
+        // Display conversations list
+        function displayConversations(conversations) {
+            const conversationsList = document.getElementById('conversations-list');
+            
+            if (!conversationsList) return;
+            
+            if (conversations.length === 0) {
+                conversationsList.innerHTML = '<div class="empty-state"><h3>No conversations yet</h3><p>Start messaging with your athletes to see conversations here.</p></div>';
+                return;
+            }
+
+            conversationsList.innerHTML = conversations.map(conv => `
+                <div class="conversation-item" data-user-id="${conv.partner_id}" data-user-name="${conv.partner_name}">
+                    <div class="conversation-avatar">
+                        ${conv.partner_profile_image ? 
+                            `<img src="${conv.partner_profile_image}" alt="${conv.partner_name}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">` :
+                            conv.partner_name.split(' ').map(n => n[0]).join('')
+                        }
+                    </div>
+                    <div class="conversation-info">
+                        <div class="conversation-name">${conv.partner_name}</div>
+                        <div class="conversation-last-message">${conv.last_message}</div>
+                        <div class="conversation-time">${new Date(conv.last_message_at).toLocaleDateString()}</div>
+                    </div>
+                    ${conv.unread_count > 0 ? `<div class="unread-count">${conv.unread_count}</div>` : ''}
+                </div>
+            `).join('');
+
+            // Add click listeners to conversations
+            conversationsList.querySelectorAll('.conversation-item').forEach(item => {
+                item.addEventListener('click', () => {
+                    const userId = item.dataset.userId;
+                    const userName = item.dataset.userName;
+                    selectConversation(userId, userName);
+                });
+            });
+        }
+
+        // Select and load a conversation
+        async function selectConversation(userId, userName) {
+            currentConversation = { userId, userName };
+            
+            // Update UI to show selected conversation
+            const messageHeader = document.getElementById('current-conversation');
+            const messagesList = document.getElementById('messages-content');
+            const inputArea = document.getElementById('message-input-area');
+            
+            console.log('Selecting conversation:', { userId, userName, messageHeader, messagesList, inputArea });
+            
+            if (messageHeader) messageHeader.textContent = userName;
+            if (inputArea) inputArea.classList.remove('hidden');
+            
+            // Mark conversation as active
+            document.querySelectorAll('.conversation-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            document.querySelector(`[data-user-id="${userId}"]`)?.classList.add('active');
+            
+            // Show loading state
+            if (messagesList) {
+                messagesList.innerHTML = '<div class="loading">Loading messages...</div>';
+            }
+            
+            // Load messages
+            try {
+                // Add cache-busting parameter
+                const timestamp = new Date().getTime();
+                const response = await fetch(`/api/messages/conversation/${userId}?_t=${timestamp}`, {
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`,
+                        'Content-Type': 'application/json',
+                        'Cache-Control': 'no-cache'
+                    }
+                });
+
+                console.log('Messages response:', response.status);
+
+                if (response.ok) {
+                    const data = await response.json();
+                    console.log('Messages data:', data);
+                    displayMessages(data.messages || []);
+                } else {
+                    const errorText = await response.text();
+                    console.error('Failed to load messages:', response.status, errorText);
+                    if (messagesList) {
+                        messagesList.innerHTML = '<div class="empty-state"><p>Failed to load messages</p></div>';
+                    }
+                }
+            } catch (error) {
+                console.error('Error loading messages:', error);
+                if (messagesList) {
+                    messagesList.innerHTML = '<div class="empty-state"><p>Error loading messages</p></div>';
+                }
+            }
+        }
+
+        // Display messages in conversation
+        function displayMessages(messages) {
+            const messagesList = document.getElementById('messages-content');
+            
+            console.log('Displaying messages:', { 
+                messagesCount: messages.length, 
+                messagesList: !!messagesList,
+                currentUser: currentUser?.user_id,
+                messages: messages
+            });
+            
+            if (!messagesList) {
+                console.error('messages-content element not found');
+                return;
+            }
+            
+            if (messages.length === 0) {
+                messagesList.innerHTML = '<div class="empty-state"><p>No messages yet. Start the conversation!</p></div>';
+                return;
+            }
+
+            const messagesHTML = messages.map(msg => {
+                const isOwnMessage = msg.sender_id === currentUser?.user_id;
+                console.log('Processing message:', { 
+                    messageId: msg.message_id, 
+                    senderId: msg.sender_id, 
+                    content: msg.content,
+                    isOwnMessage,
+                    currentUserId: currentUser?.user_id
+                });
+                
+                return `
+                    <div class="message ${isOwnMessage ? 'own-message' : 'other-message'}">
+                        <div class="message-content">${msg.content}</div>
+                        <div class="message-time">${new Date(msg.sent_at).toLocaleString()}</div>
+                    </div>
+                `;
+            }).join('');
+            
+            console.log('Generated messages HTML:', messagesHTML);
+            console.log('Setting innerHTML on element:', messagesList);
+            messagesList.innerHTML = messagesHTML;
+            console.log('After setting innerHTML, element content:', messagesList.innerHTML);
+            console.log('Element visibility:', getComputedStyle(messagesList).display, getComputedStyle(messagesList).visibility);
+            
+            // Scroll to bottom
+            messagesList.scrollTop = messagesList.scrollHeight;
+        }
+
+        // Send message functionality
+        document.addEventListener('DOMContentLoaded', () => {
+            const sendBtn = document.getElementById('send-message-btn');
+            const messageInput = document.getElementById('message-input');
+            
+            if (sendBtn && messageInput) {
+                sendBtn.addEventListener('click', sendMessage);
+                messageInput.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter' && !e.shiftKey) {
+                        e.preventDefault();
+                        sendMessage();
+                    }
+                });
+            }
+        });
+
+        async function sendMessage() {
+            const messageInput = document.getElementById('message-input');
+            const content = messageInput.value.trim();
+            
+            if (!content || !currentConversation) return;
+            
+            try {
+                const response = await fetch('/api/messages/send', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        receiverId: currentConversation.userId,
+                        content: content
+                    })
+                });
+
+                if (response.ok) {
+                    messageInput.value = '';
+                    // Reload messages to show the new one
+                    selectConversation(currentConversation.userId, currentConversation.userName);
+                } else {
+                    const errorData = await response.json();
+                    showMessage(errorData.error || 'Failed to send message', 'error');
+                }
+            } catch (error) {
+                console.error('Error sending message:', error);
+                showMessage('Error sending message. Please try again.', 'error');
+            }
+        }
+
+        // Load account settings
+        async function loadAccountSettings() {
+            console.log('Loading account settings...');
+            const loadingEl = document.getElementById('account-loading');
+            const contentEl = document.getElementById('account-content');
+            
+            if (!loadingEl || !contentEl || !currentUser) return;
+            
+            loadingEl.classList.remove('hidden');
+            contentEl.classList.add('hidden');
+
+            try {
+                // Get full profile data
+                const response = await fetch('/api/users/profile', {
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (response.ok) {
+                    const profileData = await response.json();
+                    displayAccountSettings(profileData);
+                    loadingEl.classList.add('hidden');
+                    contentEl.classList.remove('hidden');
+                } else {
+                    throw new Error('Failed to load profile');
+                }
+            } catch (error) {
+                console.error('Failed to load account settings:', error);
+                loadingEl.classList.add('hidden');
+                contentEl.innerHTML = '<div class="empty-state"><h3>Error loading account details</h3><p>Please try again later.</p></div>';
+                contentEl.classList.remove('hidden');
+            }
+        }
+
+        function displayAccountSettings(profile) {
+            // Update avatar
+            const avatarEl = document.getElementById('profile-avatar');
+            const nameEl = document.getElementById('profile-name');
+            const emailEl = document.getElementById('profile-email');
+            
+            if (profile.profile_image_url) {
+                avatarEl.style.backgroundImage = `url(${profile.profile_image_url})`;
+                avatarEl.style.backgroundSize = 'cover';
+                avatarEl.textContent = '';
+            } else {
+                const initials = `${profile.first_name?.[0] || ''}${profile.last_name?.[0] || ''}`.toUpperCase();
+                avatarEl.textContent = initials || 'CN';
+            }
+            
+            nameEl.textContent = `${profile.first_name} ${profile.last_name}`;
+            emailEl.textContent = profile.email;
+
+            // Update details
+            document.getElementById('detail-role').textContent = profile.role.charAt(0).toUpperCase() + profile.role.slice(1);
+            document.getElementById('detail-joined').textContent = new Date(profile.created_at).toLocaleDateString();
+            
+            // Handle clinician-specific data
+            if (profile.clinician_profile) {
+                const cp = profile.clinician_profile;
+                
+                // Specialties
+                const specialtiesEl = document.getElementById('detail-specialties');
+                if (cp.specialties && cp.specialties.length > 0) {
+                    specialtiesEl.innerHTML = cp.specialties.map(s => 
+                        `<span class="specialty-tag">${s}</span>`
+                    ).join('');
+                } else {
+                    specialtiesEl.innerHTML = '<span class="specialty-tag">No specialties listed</span>';
+                }
+                
+                // Experience
+                document.getElementById('detail-experience').textContent = 
+                    cp.years_experience ? `${cp.years_experience} years` : 'Not specified';
+                
+                // Verified status
+                document.getElementById('detail-verified').textContent = 
+                    cp.verified ? 'Yes' : 'Pending';
+            } else {
+                // Default values for basic profile
+                document.getElementById('detail-specialties').innerHTML = '<span class="specialty-tag">Profile incomplete</span>';
+                document.getElementById('detail-experience').textContent = 'Not specified';
+                document.getElementById('detail-verified').textContent = 'Pending';
+            }
+            
+            // Bio
+            document.getElementById('detail-bio').textContent = profile.bio || 'No bio provided';
+        }
+
+        // Logout handler
+        document.getElementById('logout-btn').addEventListener('click', () => {
+            localStorage.removeItem('authToken');
+            sessionStorage.removeItem('lastRedirect');
+            window.location.href = '/';
+        });
+
+        // Create event handler
+        document.getElementById('create-event-btn').addEventListener('click', () => {
+            openCreateEventModal();
+        });
+
+        // Create Event Modal Functions
+        function openCreateEventModal() {
+            const modal = document.getElementById('createEventModal');
+            modal.style.display = 'flex';
+            
+            // Reset form
+            document.getElementById('createEventForm').reset();
+            
+            // Reset duration to defaults
+            document.getElementById('eventDays').value = '1';
+            document.getElementById('eventHours').value = '2';
+            document.getElementById('eventMinutes').value = '0';
+            
+            // Reset bring lists to single empty item
+            resetBringLists();
+        }
+
+        function closeCreateEventModal() {
+            const modal = document.getElementById('createEventModal');
+            modal.style.display = 'none';
+        }
+
+        function resetBringLists() {
+            const requiredItems = document.getElementById('requiredItems');
+            const recommendedItems = document.getElementById('recommendedItems');
+            
+            requiredItems.innerHTML = `
+                <div class="bring-item">
+                    <input type="text" placeholder="Enter required item" class="bring-input">
+                    <button type="button" class="remove-item">×</button>
+                </div>
+            `;
+            
+            recommendedItems.innerHTML = `
+                <div class="bring-item">
+                    <input type="text" placeholder="Enter recommended item" class="bring-input">
+                    <button type="button" class="remove-item">×</button>
+                </div>
+            `;
+            
+            // Re-attach event listeners
+            attachBringListeners();
+        }
+
+        function attachBringListeners() {
+            // Add item buttons
+            document.querySelectorAll('.add-item-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const targetId = e.target.getAttribute('data-target');
+                    addBringItem(targetId);
+                });
+            });
+            
+            // Remove item buttons
+            document.querySelectorAll('.remove-item').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const item = e.target.closest('.bring-item');
+                    const container = item.parentElement;
+                    
+                    // Only remove if there's more than one item
+                    if (container.querySelectorAll('.bring-item').length > 1) {
+                        item.remove();
+                    }
+                });
+            });
+        }
+
+        function addBringItem(targetId) {
+            const container = document.getElementById(targetId);
+            const isRequired = targetId === 'requiredItems';
+            
+            const newItem = document.createElement('div');
+            newItem.className = 'bring-item';
+            newItem.innerHTML = `
+                <input type="text" placeholder="Enter ${isRequired ? 'required' : 'recommended'} item" class="bring-input">
+                <button type="button" class="remove-item">×</button>
+            `;
+            
+            container.appendChild(newItem);
+            
+            // Attach listener to new remove button
+            newItem.querySelector('.remove-item').addEventListener('click', (e) => {
+                const item = e.target.closest('.bring-item');
+                const container = item.parentElement;
+                
+                // Only remove if there's more than one item
+                if (container.querySelectorAll('.bring-item').length > 1) {
+                    item.remove();
+                }
+            });
+        }
+
+        // Handle form submission
+        document.getElementById('createEventForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            // Collect form data
+            const formData = new FormData(e.target);
+            const eventData = {
+                title: formData.get('eventTitle'),
+                description: formData.get('eventDescription'),
+                location: formData.get('eventLocation'),
+                price: parseFloat(formData.get('eventPrice')),
+                max_athletes: parseInt(formData.get('maxAthletes')) || 30,
+                date: formData.get('eventDate'),
+                duration: {
+                    days: parseInt(formData.get('eventDays')) || 0,
+                    hours: parseInt(formData.get('eventHours')) || 0,
+                    minutes: parseInt(formData.get('eventMinutes')) || 0
+                },
+                overnight_camp: formData.get('overnightCamp') === 'on',
+                required_items: [],
+                recommended_items: []
+            };
+            
+            // Collect required items
+            document.querySelectorAll('#requiredItems .bring-input').forEach(input => {
+                if (input.value.trim()) {
+                    eventData.required_items.push(input.value.trim());
+                }
+            });
+            
+            // Collect recommended items
+            document.querySelectorAll('#recommendedItems .bring-input').forEach(input => {
+                if (input.value.trim()) {
+                    eventData.recommended_items.push(input.value.trim());
+                }
+            });
+            
+            // Validate required fields
+            if (!eventData.title || !eventData.description || !eventData.location || !eventData.date) {
+                showMessage('Please fill in all required fields', 'error');
+                return;
+            }
+            
+            // Validate price
+            if (eventData.price < 0) {
+                showMessage('Price cannot be negative', 'error');
+                return;
+            }
+            
+            // Validate duration
+            if (eventData.duration.days === 0 && eventData.duration.hours === 0 && eventData.duration.minutes === 0) {
+                showMessage('Event duration must be greater than 0', 'error');
+                return;
+            }
+            
+            console.log('Event data to submit:', eventData);
+            
+            try {
+                const url = editingEventId ? `/api/events/${editingEventId}` : '/api/events';
+                const method = editingEventId ? 'PUT' : 'POST';
+                const response = await fetch(url, {
+                    method,
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(eventData)
+                });
+                
+                if (response.ok) {
+                    const result = await response.json();
+                    showMessage(editingEventId ? 'Event updated successfully!' : 'Event created successfully!', 'success');
+                    closeCreateEventModal();
+                    
+                    // Reset modal heading/button
+                    document.querySelector('#createEventModal .modal-header h2').textContent = 'Create New Event';
+                    document.querySelector('#createEventForm button[type="submit"]').textContent = 'Create Event';
+                    editingEventId = null;
+                    
+                    // Refresh events if we're on the events section
+                    if (document.getElementById('events-section').classList.contains('active')) {
+                        loadEvents();
+                    }
+                } else {
+                    const errorData = await response.json();
+                    showMessage(errorData.error || 'Failed to create event', 'error');
+                }
+            } catch (error) {
+                console.error('Error creating event:', error);
+                showMessage('Error creating event. Please try again.', 'error');
+            }
+        });
+
+        // Initialize create event modal
+        function initializeCreateEventModal() {
+            const modal = document.getElementById('createEventModal');
+            const overlay = modal.querySelector('.modal-overlay');
+            const closeBtn = document.getElementById('createEventCloseBtn');
+            const cancelBtn = document.getElementById('cancelEventBtn');
+
+            // Close on overlay click
+            overlay.addEventListener('click', closeCreateEventModal);
+            
+            // Close on X button click
+            closeBtn.addEventListener('click', closeCreateEventModal);
+            
+            // Close on cancel button click
+            cancelBtn.addEventListener('click', closeCreateEventModal);
+            
+            // Close on escape key
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && modal.style.display === 'flex') {
+                    closeCreateEventModal();
+                }
+            });
+            
+            // Initialize bring list listeners
+            attachBringListeners();
+        }
+
+        // Initialize athlete profile modal
+        function initializeAthleteProfileModal() {
+            const modal = document.getElementById('athleteProfileModal');
+            const overlay = modal.querySelector('.modal-overlay');
+            const closeBtn = document.getElementById('athleteProfileCloseBtn');
+
+            // Close on overlay click
+            overlay.addEventListener('click', closeAthleteProfile);
+            
+            // Close on X button click
+            closeBtn.addEventListener('click', closeAthleteProfile);
+            
+            // Close on escape key
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && modal.style.display === 'flex') {
+                    closeAthleteProfile();
+                }
+            });
+        }
+
+        // Initialize
+        initializeAthleteProfileModal();
+        initializeCreateEventModal();
+        checkAuth();
+
+        /* ======================= */
+        /*  EVENT EDITING HELPERS  */
+        /* ======================= */
+
+        // Populate the create/edit event form with existing event data
+        function populateEventForm(event) {
+            document.getElementById('eventTitle').value = event.title || '';
+            document.getElementById('eventLocation').value = event.location || '';
+            document.getElementById('eventPrice').value = event.price || 0;
+            document.getElementById('maxAthletes').value = event.max_athletes || 30;
+            // Date (YYYY-MM-DD)
+            if (event.start_date) {
+                const dateStr = new Date(event.start_date).toISOString().split('T')[0];
+                document.getElementById('eventDate').value = dateStr;
+            }
+
+            document.getElementById('eventDescription').value = event.description || '';
+
+            // Duration (basic handling – assumes event.duration exists)
+            if (event.duration) {
+                document.getElementById('eventDays').value = event.duration.days || 0;
+                document.getElementById('eventHours').value = event.duration.hours || 0;
+                document.getElementById('eventMinutes').value = event.duration.minutes || 0;
+            }
+
+            document.getElementById('overnightCamp').checked = !!event.overnight_camp;
+
+            // Handle bring lists
+            const requiredContainer = document.getElementById('requiredItems');
+            const recommendedContainer = document.getElementById('recommendedItems');
+            requiredContainer.innerHTML = '';
+            recommendedContainer.innerHTML = '';
+
+            (event.required_items || ['']).forEach(item => {
+                const div = document.createElement('div');
+                div.className = 'bring-item';
+                div.innerHTML = `<input type="text" class="bring-input" value="${item || ''}"><button type="button" class="remove-item">×</button>`;
+                requiredContainer.appendChild(div);
+            });
+
+            (event.recommended_items || ['']).forEach(item => {
+                const div = document.createElement('div');
+                div.className = 'bring-item';
+                div.innerHTML = `<input type="text" class="bring-input" value="${item || ''}"><button type="button" class="remove-item">×</button>`;
+                recommendedContainer.appendChild(div);
+            });
+
+            attachBringListeners();
+        }
+
+        // Open modal in edit mode
+        async function editEvent(eventId) {
+            try {
+                const res = await fetch(`/api/events/${eventId}`, {
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (res.ok) {
+                    const eventData = await res.json();
+                    editingEventId = eventId;
+                    // Open modal and populate
+                    openCreateEventModal();
+                    populateEventForm(eventData);
+
+                    // Update modal headings/buttons
+                    document.querySelector('#createEventModal .modal-header h2').textContent = 'Edit Event';
+                    document.querySelector('#createEventForm button[type="submit"]').textContent = 'Update Event';
+                } else {
+                    showMessage('Failed to load event details', 'error');
+                }
+            } catch (err) {
+                console.error('editEvent error', err);
+                showMessage('Error loading event', 'error');
+            }
+        }
+
+        // Delete event handler
+        async function deleteEvent(eventId) {
+            if (!confirm('Are you sure you want to delete this event?')) return;
+            try {
+                const res = await fetch(`/api/events/${eventId}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+                if (res.ok) {
+                    showMessage('Event deleted', 'success');
+                    loadEvents();
+                } else {
+                    const errData = await res.json();
+                    showMessage(errData.error || 'Failed to delete event', 'error');
+                }
+            } catch (err) {
+                console.error('deleteEvent error', err);
+                showMessage('Error deleting event', 'error');
+            }
+        }
+    </script>
+</body>
+</html> 

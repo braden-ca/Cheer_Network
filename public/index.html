@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Cheer Network - Connect. Train. Excel.</title>
+    <meta name="description" content="The premier platform for cheerleaders to connect with athletes, coaches, and personal trainers">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <h2>The Cheer Network</h2>
+            </div>
+            <div class="nav-menu">
+                <a href="#home" class="nav-link">Home</a>
+                <a href="#features" class="nav-link">Features</a>
+                <a href="/about.html" class="nav-link">About</a>
+                <a href="/contact.html" class="nav-link">Contact</a>
+            </div>
+            <div class="nav-auth">
+                <button class="btn-secondary" id="login-btn">Log In</button>
+                <button class="btn-secondary" id="signup-btn">Get Started</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="hero-container">
+            <div class="hero-content">
+                <h1 class="hero-title">
+                    Connect. Train. <span class="highlight">Excel.</span>
+                </h1>
+                <p class="hero-subtitle">
+                    The premier platform for cheerleaders to connect with athletes, coaches, and personal trainers. 
+                    Build your network, enhance your skills, and take your performance to the next level.
+                </p>
+                <div class="hero-cta">
+                    <button class="btn-primary large" id="join-network-btn">Join the Network</button>
+                    <button class="btn-outline large" id="learn-more-btn">Learn More</button>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="hero-image-container">
+                    <img src="test.webp" alt="Professional cheerleaders in action" class="hero-main-image">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="features">
+        <div class="container">
+            <div class="section-header">
+                <h2>Everything you need to succeed</h2>
+                <p>Comprehensive tools designed specifically for the cheerleading community</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-image">
+                        <img src="cheer%202.jpg" alt="Cheerleaders networking and training together">
+                    </div>
+                    <div class="feature-icon-large">🌟</div>
+                    <h3>Athlete Network</h3>
+                    <p>Connect with fellow cheerleaders, share experiences, and build lasting relationships within the community.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-image">
+                        <img src="thdd.jpg" alt="Expert cheer coaching session">
+                    </div>
+                    <div class="feature-icon-large">🎯</div>
+                    <h3>Expert Coaching</h3>
+                    <p>Access certified coaches who understand your sport and can help you reach your peak performance.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-image">
+                        <img src="cheer3.jpg" alt="Professional cheer training session">
+                    </div>
+                    <div class="feature-icon-large">💪</div>
+                    <h3>Personal Training</h3>
+                    <p>Work with specialized trainers who focus on the unique physical demands of cheerleading.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="container">
+            <div class="cta-content">
+                <h2>Ready to elevate your cheerleading journey?</h2>
+                <p>Join thousands of athletes, coaches, and trainers already building their network.</p>
+                <button class="btn-primary large" id="get-started-btn">Get Started Today</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Login Modal -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Welcome Back</h3>
+                <span class="close" id="close-login">&times;</span>
+            </div>
+            <div class="modal-body">
+                <form class="auth-form">
+                    <div class="form-group">
+                        <label for="login-email">Email</label>
+                        <input type="email" id="login-email" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="login-password">Password</label>
+                        <input type="password" id="login-password" name="password" required>
+                    </div>
+                    <button type="submit" class="btn-primary full-width">Log In</button>
+                </form>
+                <p class="auth-switch">
+                    Don't have an account? <a href="#" id="switch-to-signup">Sign up</a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Signup Modal -->
+    <div id="signupModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Join Cheer Network</h3>
+                <span class="close" id="close-signup">&times;</span>
+            </div>
+            <div class="modal-body">
+                <form class="auth-form">
+                    <div class="form-group">
+                        <label for="signup-role">I am a:</label>
+                        <select id="signup-role" name="role" required>
+                            <option value="">Select your role</option>
+                            <option value="athlete">Athlete/Cheerleader</option>
+                            <option value="clinician">Coach/Trainer</option>
+                        </select>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="signup-firstname">First Name</label>
+                            <input type="text" id="signup-firstname" name="firstName" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="signup-lastname">Last Name</label>
+                            <input type="text" id="signup-lastname" name="lastName" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="signup-email">Email</label>
+                        <input type="email" id="signup-email" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="signup-password">Password</label>
+                        <input type="password" id="signup-password" name="password" required>
+                    </div>
+                    <button type="submit" class="btn-primary full-width">Create Account</button>
+                </form>
+                <p class="auth-switch">
+                    Already have an account? <a href="#" id="switch-to-login">Log in</a>
+                </p>
+                <p class="coach-note" style="margin-top: 1rem; padding: 0.75rem; background: #f8fafc; border-radius: 6px; font-size: 0.9rem; color: #4a5568;">
+                    <strong>Coaches/Trainers:</strong> After creating your account, you'll be able to complete your detailed profile with specialties, certifications, and experience.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html> 

@@ -1,0 +1,22 @@
+import Joi from 'joi';
+import { Request, Response, NextFunction } from 'express';
+export declare const validateRequest: (schema: Joi.ObjectSchema) => (req: Request, res: Response, next: NextFunction) => Response<any, Record<string, any>> | undefined;
+export declare const registerSchema: Joi.ObjectSchema<any>;
+export declare const clinicianRegisterSchema: Joi.ObjectSchema<any>;
+export declare const loginSchema: Joi.ObjectSchema<any>;
+export declare const updateProfileSchema: Joi.ObjectSchema<any>;
+export declare const clinicianProfileSchema: Joi.ObjectSchema<any>;
+export declare const athleteProfileSchema: Joi.ObjectSchema<any>;
+export declare const createEventSchema: Joi.ObjectSchema<any>;
+export declare const createEventFrontendSchema: Joi.ObjectSchema<any>;
+export declare const updateEventSchema: Joi.ObjectSchema<any>;
+export declare const createMessageSchema: Joi.ObjectSchema<any>;
+export declare const createSocialPostSchema: Joi.ObjectSchema<any>;
+export declare const createNewsPostSchema: Joi.ObjectSchema<any>;
+export declare const paginationSchema: Joi.ObjectSchema<any>;
+export declare const eventFiltersSchema: Joi.ObjectSchema<any>;
+export declare const eventsQuerySchema: Joi.ObjectSchema<any>;
+export declare const passwordResetSchema: Joi.ObjectSchema<any>;
+export declare const passwordUpdateSchema: Joi.ObjectSchema<any>;
+export declare const validateQuery: (schema: Joi.ObjectSchema) => (req: Request, res: Response, next: NextFunction) => Response<any, Record<string, any>> | undefined;
+//# sourceMappingURL=validation.d.ts.map

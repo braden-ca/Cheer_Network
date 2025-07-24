@@ -1,0 +1,59 @@
+[2025-07-08T23:15:52.707Z] [MASTER] 🚀 Starting Master Debug Suite - Comprehensive Analysis
+[2025-07-08T23:15:52.709Z] [INFO] ================================================================================
+[2025-07-08T23:15:52.709Z] [SUITE] 
+🔧 Running Database Debug Suite...
+[2025-07-08T23:15:52.709Z] [INFO] 📋 Testing database schema, RLS, and operations
+[2025-07-08T23:15:52.709Z] [INFO] ------------------------------------------------------------
+[2025-07-08T23:15:55.938Z] [SUCCESS] ✅ Database Debug Suite completed
+[2025-07-08T23:15:55.938Z] [INFO]    Successes: 20
+[2025-07-08T23:15:55.938Z] [INFO]    Errors: 12
+[2025-07-08T23:15:55.938Z] [SUITE] 
+🔧 Running Upload System Debug Suite...
+[2025-07-08T23:15:55.938Z] [INFO] 📋 Testing file upload functionality
+[2025-07-08T23:15:55.938Z] [INFO] ------------------------------------------------------------
+[2025-07-08T23:15:55.944Z] [SUCCESS] ✅ Upload System Debug Suite completed
+[2025-07-08T23:15:55.944Z] [INFO]    Successes: 24
+[2025-07-08T23:15:55.944Z] [INFO]    Errors: 1
+[2025-07-08T23:15:55.945Z] [SUITE] 
+🔧 Running Comprehensive Debug Suite...
+[2025-07-08T23:15:55.945Z] [INFO] 📋 Testing backend APIs and integrations
+[2025-07-08T23:15:55.945Z] [INFO] ------------------------------------------------------------
+[2025-07-08T23:15:56.217Z] [ERROR] ❌ Comprehensive Debug Suite failed: Assignment to constant variable.
+[2025-07-08T23:15:56.217Z] [INTEGRATION] 
+🔗 Testing System Integration...
+[2025-07-08T23:15:56.217Z] [ERROR] ❌ Server is not running or not accessible
+[2025-07-08T23:15:56.217Z] [INFO]    Make sure to run "npm run dev" to start the server
+[2025-07-08T23:15:56.217Z] [FILES] 
+📁 Checking critical file structure...
+[2025-07-08T23:15:56.218Z] [SUCCESS] ✅ src/server.ts exists
+[2025-07-08T23:15:56.218Z] [SUCCESS] ✅ src/routes/auth.ts exists
+[2025-07-08T23:15:56.218Z] [SUCCESS] ✅ src/routes/users.ts exists
+[2025-07-08T23:15:56.218Z] [SUCCESS] ✅ src/routes/upload.ts exists
+[2025-07-08T23:15:56.218Z] [SUCCESS] ✅ public/index.html exists
+[2025-07-08T23:15:56.218Z] [SUCCESS] ✅ public/script.js exists
+[2025-07-08T23:15:56.218Z] [SUCCESS] ✅ package.json exists
+[2025-07-08T23:15:56.219Z] [SUCCESS] ✅ .env exists
+[2025-07-08T23:15:56.219Z] [ANALYSIS] 
+📊 Analyzing Overall System Health...
+[2025-07-08T23:15:56.219Z] [STATS] 
+📈 OVERALL STATISTICS:
+[2025-07-08T23:15:56.219Z] [INFO]    Total Tests Run: 64
+[2025-07-08T23:15:56.219Z] [SUCCESS]    Successful Tests: 44
+[2025-07-08T23:15:56.219Z] [ERROR]    Failed Tests: 13
+[2025-07-08T23:15:56.219Z] [INFO]    Success Rate: 68.8%
+[2025-07-08T23:15:56.219Z] [WARNING] ⚠️ SYSTEM HEALTH: NEEDS ATTENTION
+[2025-07-08T23:15:56.219Z] [ACTIONS] 
+📋 Generating Action Items...
+[2025-07-08T23:15:56.219Z] [ACTIONS] 
+🎯 RECOMMENDED ACTIONS:
+[2025-07-08T23:15:56.219Z] [ACTION]    1. 🔧 Database: Clinician 1 missing required data: {"clinician_id":"9ea4608a-7d7b-4d86-88ba-fa742d1090b4","specialties":[],"years_experience":0,"certifications":[],"location":null,"hourly_rate":null,"verified":false,"rating":0,"total_reviews":0,"created_at":"2025-07-08T06:14:52.212244+00:00","updated_at":"2025-07-08T06:14:52.212244+00:00"}
+[2025-07-08T23:15:56.219Z] [ACTION]    2. ⚠️ Database: Join query failed
+[2025-07-08T23:15:56.220Z] [ACTION]    3. ⚠️ Database: Lookup table access failed
+[2025-07-08T23:15:56.220Z] [ACTION]    4. ⚠️ Database: INSERT operation failed
+[2025-07-08T23:15:56.220Z] [ACTION]    5. ⚠️ Database: School INSERT failed
+[2025-07-08T23:15:56.220Z] [ACTION]    6. ⚠️ Database: Lookup tables query performance test failed
+[2025-07-08T23:15:56.220Z] [ACTION]    7. ⚠️ Database: Specialties lookup constraint test failed
+[2025-07-08T23:15:56.220Z] [ACTION]    8. ⚠️ Upload System: Upload endpoint test failed
+[2025-07-08T23:15:56.220Z] [REPORT] 
+📄 Generating Comprehensive Report...
+[2025-07-08T23:15:56.221Z] [SUCCESS] 📁 Comprehensive report saved to: C:\Users\Braden Smelser\Desktop\Cheer_Network\debug-master-report-1752016556220.json
