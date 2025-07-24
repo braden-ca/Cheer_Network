@@ -1995,7 +1995,7 @@
 
             try {
                 console.log('Fetching user profile...');
-                const response = await fetch('/api/users/profile', {
+                const response = await fetch('https://cheer-network.onrender.com/api/users/profile', {
                     headers: {
                         'Authorization': `Bearer ${authToken}`,
                         'Content-Type': 'application/json'
@@ -2036,7 +2036,7 @@
             
             try {
                 // Get user profile with stats
-                const response = await fetch('/api/users/profile', {
+                const response = await fetch('https://cheer-network.onrender.com/api/users/profile', {
                     headers: {
                         'Authorization': `Bearer ${authToken}`,
                         'Content-Type': 'application/json'
@@ -2909,7 +2909,7 @@
 
             try {
                 // Get full profile data
-                const response = await fetch('/api/users/profile', {
+                const response = await fetch('https://cheer-network.onrender.com/api/users/profile', {
                     headers: {
                         'Authorization': `Bearer ${authToken}`,
                         'Content-Type': 'application/json'
