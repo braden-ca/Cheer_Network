@@ -95,7 +95,8 @@ app.use('/api/messages', (req, res, next) => {
   console.log(`Messages route hit: ${req.method} ${req.originalUrl}`);
   next();
 }, messageRoutes);
-app.use('/api/payments', paymentRoutes);
+// PAYMENTS DISABLED - Uncomment to re-enable
+// app.use('/api/payments', paymentRoutes);
 app.use('/api/dropdown', dropdownRoutes);
 app.use('/api/upload', uploadRoutes);
 
